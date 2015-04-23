@@ -1,0 +1,465 @@
+body {
+    font-family: 'Oxygen', sans-serif;
+}
+
+.updates { background-color: orange; float: right; padding: 1em; font-weight: bold; }
+
+.navbar { color: #0099cc; background-color: white; }
+.navbar a { text-decoration: none; color: #0099cc; font-size: 0.8em; }
+.navbar a:hover { color: black; }
+
+label {
+    font-weight: bold;
+    color: blue;
+}
+
+.accordion_toggle {
+    width: 90%;
+    margin: 0px auto;
+    padding: 0.6em;
+    clear: both;
+    border-radius: 10px;
+    background: #7abcff; /* Old browsers */
+    background: -moz-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7abcff), color-stop(44%,#60abf8), color-stop(100%,#4096ee)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* IE10+ */
+    background: linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#4096ee',GradientType=0 ); /* IE6-9 */
+}
+
+.accordion_toggle_active {
+    padding: 1em;
+    background: lightgreen;
+    clear: both;
+}
+
+.title_name {
+    font-weight: bold;
+    float: left;
+}
+
+.title_setting {
+    text-align: center;
+}
+
+#frequency_select {
+
+}
+
+#frequency_select > span {
+    display: block;
+    margin-top: 1em;
+}
+
+#array_select > span {
+    display: block;
+    margin-top: 1em;
+}
+
+#reduction_select > span {
+    display: block;
+    margin-top: 1em;
+}
+
+#fourcm_stuff > span {
+    display: block;
+    margin-top: 1em;
+}
+
+#hiding_element > span {
+    display: block;
+    margin-top: 1em;
+}
+
+#band_information > span {
+    display: block;
+    margin-top: 1em;
+}
+
+#correlator_select li {
+    margin-left: 2em;
+    margin-top: 0.4em;
+}
+
+#observation_select > span {
+    display: block;
+    margin-top: 1em;
+}
+
+#declination_errors {
+    color: red;
+}
+
+#limits_errors {
+    color: red;
+}
+
+.accordion_content {
+    width: 90%;
+    margin: 0px auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    background: white;
+}
+
+#frequency_range_table {
+    float: right;
+    margin-left: 1em;
+}
+
+.frequency_range {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.frequency_range thead {
+    font-weight: bold;
+    border: 1px solid black;
+    color: white;
+    background-color: #222;
+    border-right: 1px dotted #666;
+    border-top: 3px solid #666;
+    -moz-box-shadow: 0px -1px 4px #000;
+    box-shadow: 0px -1px 4px #000;
+}
+
+.frequency_range th {
+    text-align: center;
+    padding: 0.4em;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.frequency_range td {
+    text-align: center;
+    padding: 0.4em;
+}
+
+.note {
+    font-weight: bold;
+    display: block;
+    padding: 0.6em;
+}
+
+#band_selector {
+    text-align: center;
+    font-weight: bold;
+    color: blue;
+}
+
+.band_button {
+    width: 10%;
+}
+
+.recommendedFrequency {
+    cursor: pointer;
+    font-weight: bold;
+    color: green;
+}
+
+#continuum_frequency_errors {
+    color: red;
+    font-weight: bold;
+}
+
+#zoom_frequency_errors {
+    color: red;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+#correlator_select span {
+    display: block;
+    margin-top: 1em;
+}
+
+input {
+    background: #f7f4de;
+    padding: 5px;
+    border: 1px dotted #ece5b2;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.band_button {
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background-color:#ededed;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    color:#777777;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #ffffff;
+}
+
+.band_button:hover {
+    background-color:#dfdfdf;
+}
+
+.band_button:active {
+    position:relative;
+    top:1px;
+}
+
+#calcsens_button {
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background-color:#ededed;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    color:#777777;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #ffffff;
+}
+
+#calcsens_button:hover {
+    background-color:#dfdfdf;
+}
+
+#calcsens_button:active {
+    position:relative;
+    top:1px;
+}
+
+select {
+    margin-left: 1em;
+}
+
+#usage_guide {
+    width: 90%;
+    margin: 0px auto;
+    background-color: BlanchedAlmond;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    padding: 0.6em;
+    border-radius: 20px;
+}
+
+#advanced_usage_guide {
+    margin: 0px auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    padding: 0.6em;
+    border-radius: 20px;
+}
+
+#usage_guide p {
+    margin-top: 1em;
+}
+
+#advanced_usage_guide p {
+    margin-top: 1em;
+}
+
+#results_section > span {
+    display: block;
+    margin-top: 1em;
+}
+
+.results_indicator {
+    margin-top: 1em;
+    display: block;
+}
+
+#results_section  h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: navy;
+    padding-top: 1em;
+}
+
+#results_section h3 {
+    font-size: 1em;
+    font-weight: bold;
+    color: navy;
+    padding-bottom: 0.6em;
+}
+
+.results_indicator {
+    color: black;
+}
+
+.results {
+    color: green;
+}
+
+.resultsTable {
+    border: 1px solid black;
+    border-collapse: collapse;
+    empty-cells: hide;
+}
+
+.resultsTable thead {
+    font-weight: bold;
+    border: 1px solid black;
+    color: white;
+    background-color: #222;
+    border-right: 1px dotted #666;
+    border-top: 3px solid #666;
+    -moz-box-shadow: 0px -1px 4px #000;
+    box-shadow: 0px -1px 4px #000;
+}
+
+.resultsTable th {
+    text-align: right;
+    padding: 0.4em;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.resultsTable td {
+    text-align: center;
+    padding: 0.4em;
+}
+
+#continuum_rms_image {
+    width: 170px;
+    cursor: pointer;
+}
+
+.pagefooter {
+    margin-top: 3em;
+    border-top: 1px solid black;
+    padding: 1em;
+}
+
+.bandtable_selector {
+    cursor: pointer;
+}
+
+#calculator_parameters {
+    float: left;
+}
+
+hr {
+    clear: both;
+}
+
+#calculator_parameters table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-left: 1em;
+}
+
+#calculator_parameters td, th {
+    padding: 0.2em;
+}
+
+#calculator_parameters th {
+    color: blue;
+    font-weight: bold;
+    text-align: right;
+}
+
+.table_button {
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background-color:#ededed;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid #dcdcdc;
+    display:inline-block;
+    color:#777777;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #ffffff;
+    width: 100%;
+}
+
+.table_button:hover {
+    background-color:#dfdfdf;
+}
+
+.table_button:active {
+    position:relative;
+    top:1px;
+}
+
+#calculator_parameters {
+    margin: 2em;
+}
+
+#results_of_calculation {
+    margin: 2em;
+    
+}
+
+h1 {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: navy;
+    padding-top: 1em;
+}
+
+.parameters_table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 80%;
+}
+
+th.parameters_table {
+    font-weight: bold;
+    color: blue;
+    padding: 0.4em;
+}
+
+td.parameters_table {
+    padding: 0.4em;
+}
+
+th.param_section {
+    text-align: right;
+    font-weight: bold;
+    border: 1px solid black;
+    color: white;
+    background-color: #222;
+    border-right: 1px dotted #666;
+    border-top: 3px solid #666;
+}
+
+.parameters_row {
+    border: 0px;
+    border-collapse: collapse;
+}
+
+.result_label {
+    padding: 0.4em;
+    font-weight: bold;
+    color: blue;
+}
+
+.parameters_row td {
+    padding: 0.4em;
+}
+
+.result_container {
+    display: inline-block;
+    white-space: nowrap;
+}
+

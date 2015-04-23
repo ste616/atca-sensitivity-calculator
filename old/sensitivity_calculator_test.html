@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css"
+          href="http://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
+    <link href="http://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css"
+	  href="sensitivity_calculator.css">
+    <style type="text/css">
+      @import "/jslib/dojo/1.7.2/dijit/themes/tundra/tundra.css";
+      @import "/jslib/dojo/1.7.2/dojox/image/resources/Lightbox.css";
+    </style>
+    <script src="/jslib/dojo/1.7.2/dojo/dojo.js"></script>
+    <script src="sensitivity_calculator.js"></script>
+    <title>ATCA Sensitivity Calculator</title>
+  </head>
+  <body class="tundra">
+    <!--#include virtual="/includefiles/ca_header.html" -->  
+    <div id="usage_guide">
+      <p>
+	This is the Australia Telescope Compact Array (ATCA) sensitivity calculator, specifically built
+	to give maximum assistance to users who may not be familiar with the capabilities of the telescope.
+	It aims to guide users through the process of planning an optimal observation strategy,
+	calculate the resulting expected sensitivity and present it in a friendly way.
+      </p>
+      <p>The calculator that this page uses is identical to the traditional calculator page found
+	<a href="http://www.narrabri.atnf.csiro.au/cgi-bin/obstools/atsen8.pl">here</a>, so users who do
+	not need the extra assistance may continue to use it.</p>
+      <p>This calculator should be treated as a questionaire. Each panel will ask a series of questions,
+	and when enough valid information is entered, the next panel(s) will open. The panels can be manually
+	opened or closed by clicking on the blue bars. The blue bars also show a summary of the settings
+	made in each panel.</p>
+      <p>When enough valid information is given by the user, a "Calculate Sensitivity" button will appear in
+	the "Calculation and Results" bar. Clicking this button will close all the panels and present the
+	results.</p>
+      <p>Questions, comments and issues should be addressed to Jamie (dot) Stevens (at) csiro (dot) au.</p>
+    </div>
+    <div id="calculator_accordion">
+      <div class="accordion_toggle">
+	<div class="title_name">Observing Frequency</div>
+	<div class="title_setting" id="observing_frequency_setting">Not set</div>
+      </div>
+      <div class="accordion_content">
+	<div id="frequency_range_table">
+	  <table class="frequency_range">
+	    <thead>
+	      <tr><td></td><td colspan="2">Frequency (GHz)</td></tr>
+	      <tr><td>Receiver Name</td><td>low</td><td>high</td></tr>
+	    </thead>
+	    <tbody>
+	      <tr><th id="bandtable_16cm">16cm</th><td>1.1</td><td>3.1</td></tr>
+	      <tr><th id="bandtable_6cm">6cm</th><td>4.4</td><td>6.7</td></tr>
+	      <tr><th id="bandtable_4cm">4cm</th><td>4.0</td><td>12.0</td></tr>
+	      <tr><th id="bandtable_3cm">3cm</th><td>8.0</td><td>10.0</td></tr>
+	      <tr><th id="bandtable_15mm">15mm</th><td>16.0</td><td>25.0</td></tr>
+	      <tr><th id="bandtable_7mm">7mm</th><td>30.0</td><td>50.0</td></tr>
+	      <tr><th id="bandtable_3mm">3mm</th><td>83.0</td><td>105.0</td></tr>
+	    </tbody>
+	  </table>
+	</div>
+	<div id="frequency_select">
+	  The ATCA receiver suite is able to cover the range of frequencies shown
+	  in the table on the right.
+	  <span class="note">
+	    The new, upgraded 4cm receivers are being installed on the ATCA in stages. Currently
+	    there is only one receiver available, on CA02. As such, it is still advisable to treat
+	    the 6cm and 3cm bands separately.
+	  </span>
+	  <span id="band_selector">
+	    Please select your band of interest, by clicking on either the buttons below, or
+	    the name of the receiver in the table to the right.<br />
+	    <button class="band_button" type="button" id="button_16cm">16cm</button>
+	    <button class="band_button" type="button" id="button_6cm">6cm</button>
+	    <button class="band_button" type="button" id="button_3cm">3cm</button>
+	    <button class="band_button" type="button" id="button_15mm">15mm</button>
+	    <button class="band_button" type="button" id="button_7mm">7mm</button>
+	    <button class="band_button" type="button" id="button_3mm">3mm</button>
+	  </span>
+	  <div id="hiding_element" class="hidden">
+	    <span id="band_information">
+	      <span>With CABB, the 2 GHz continuum band is always recorded. You must choose the centre
+		frequency of this continuum band.</span>
+	      <span>In the <span id="bandNameHere"></span> band, the centre frequency must be between
+		<span id="bandLowFreqHere"></span> and <span id="bandHighFreqHere"></span> MHz. To obtain
+		the optimum continuum sensitivity, the recommended centre <span id="bandRecommendedModifier"></span>
+		<span id="bandRecommendedHere"></span> MHz.
+	      </span>
+	    </span>
+	    <span id="frequency_selector">
+	      <label for="frequency_selection">Continuum centre frequency:</label>
+	      <input type="text" size="8" name="frequency_selection" id="frequency_selection" /> MHz
+	    </span>
+	    <span id="continuum_frequency_errors">
+	    </span>
+	    <span id="zoom_frequency_selector">
+	      If you want the calculator to report the sensitivity of a zoom band placed at a particular frequency, please
+	      enter this frequency here, otherwise leave blank.<br/>
+	      <label for="zoom_frequency_selection">Specific zoom frequency:</label>
+	      <input type="text" size="8" name="zoom_frequency_selection" id="zoom_frequency_selection" /> MHz
+	    </span>
+	    <span id="zoom_frequency_errors">
+	    </span>
+	  </div>
+	</div>
+      </div>
+      <div class="accordion_toggle" id="array_toggle">
+	<div class="title_name">Array Configuration</div>
+	<div class="title_setting" id="array_configuration_setting">Not set</div>
+      </div>
+      <div class="accordion_content">
+	<div id="array_select">
+	  The ATCA is periodically reconfigured to suit the requirements of the observers
+	  using it. "Long" arrays, with large antenna separations, are useful for continuum studies
+	  of compact sources where resolution is important, while "short" arrays are useful for
+	  line studies, or when sensitivity to diffuse sources is required.
+	  
+	  <span>
+	    You can use this calculator to estimate the sensitivity in an array with a maximum
+	    baseline that you choose. Note that this is not necessarily exactly what you would
+	    get in a particular array configuration, which may have a different set of shorter
+	    baselines.
+	  </span>
+	  <span id="baseline_selector">
+	    <label for="baseline_selection">Maximum baseline and configuration:</label>
+	    <select name="baseline_selection" id="baseline_selection">
+	      <option value="">Please select...</option>
+	      <option value="6km">East-West 6km</option>
+	      <option value="3km">East-West 3km</option>
+	      <option value="1.5km">East-West 1.5km</option>
+	      <option value="750m">East-West 750m</option>
+	      <option value="367">East-West 367m</option>
+	      <option value="H214">Hybrid 214m</option>
+	      <option value="H168">Hybrid 168m</option>
+	      <option value="H75">Hybrid 75m</option>
+	    </select>
+	  </span>
+	  <span id="antenna6_preamble"></span>
+	  <span id="antenna6_selector">
+	    <label for="antenna6_selection">Do you want to include CA06 in the sensitivity calculation?</label>
+	    <select name="antenna6_selection" id="antenna6_selection">
+	      <option value="yes">Yes</option>
+	      <option value="no">No</option>
+	    </select>
+	  </span>
+	  <div id="fourcm_stuff" class="hidden">
+	    <span id="fourcm_preamble">
+	      At the moment, there is only one upgraded 4cm receiver in the array, on CA02. You
+	      may, however, calculate the sensitivity for any number of 4cm receivers.
+	    </span>
+	    <span id="fourcm_selector">
+	      <label for="fourcm_selection">Number of 4cm receivers to calculate sensitivity for:</label>
+	      <input type="text" size="3" maxlength="1" value="1" name="fourcm_selection" id="fourcm_selection" />
+	    </span>
+	  </div>
+	</div>
+      </div>
+      <div class="accordion_toggle" id="correlator_toggle">
+	<div class="title_name">Correlator Configuration</div>
+	<div class="title_setting" id="correlator_configuration_setting">Not set</div>
+      </div>
+      <div class="accordion_content">
+	<div id="correlator_select">
+	  <span>
+	    The frequency resolution of CABB's 2 GHz continuum band can be configured to
+	    best suit the observation.
+	    <ul>
+	      <li>For continuum observations, it is best to select
+		the highest frequency resolution possible, which for CABB is 1 MHz.</li>
+	      <li>For spectral-line observations, you will generally want to use the
+		correlator mode that will give you the optimum spectral coverage.</li>
+	      <li>The calculator allows both available and planned CABB modes to be selected:
+		please check the <a href="http://www.narrabri.atnf.csiro.au/observing/CABB.html">
+		  CABB webpage</a> for the modes that have been implemented.</li>
+	    </ul>
+	  </span>
+	  <span id="cabb_selector">
+	    <label for="cabb_selection">CABB frequency resolution:</label>
+	    <select name="cabb_selection" id="cabb_selection">
+	      <option value="">Please select...</option>
+	      <option value="CFB1M">1 MHz continuum, 0.5 kHz spectral</option>
+	      <option value="CFB4M">4 MHz continuum, 2 kHz spectral</option>
+	      <option value="CFB16M">16 MHz continuum, 8 kHz spectral</option>
+	      <option value="CFB64M">64 MHz continuum, 32 kHz spectral</option>
+	    </select>
+	  </span>
+	  <span>
+	    You may choose to concatenate more than one zoom channel together to produce
+	    a zoom band with a larger width and more channels; you will always get 2048 channels
+	    per standard zoom width. The correlator can concatenate up to 16 zoom channels into
+	    a single zoom band.
+	  </span>
+	  <span id="concatenation_selector">
+	    <label for="concatenation_selection">Zoom channels to concatenate:</label>
+	    <input type="text" name="concatenation_selection" id="concatenation_selection" 
+		   size="3" maxlength="2" value="1" />
+	  </span>
+	</div>
+      </div>
+      <div class="accordion_toggle" id="observation_toggle">
+	<div class="title_name">Observation Details</div>
+	<div class="title_setting" id="observation_setting">Not set</div>
+      </div>
+      <div class="accordion_content">
+	<div id="observation_select">
+	  <span>
+	    Please describe the observation you will make.
+	  </span>
+	  <span>
+	    <label for="declination_selection">Source Declination:</label>
+	    <input type="text" size="4" maxlength="3" value="-30" name="declination_selection"
+		   id="declination_selection" /> degrees
+	  </span>
+	  <span id="declination_errors">
+	  </span>
+	  <span>
+	    Specify the integration as the time spent on-source, excluding calibration overheads.
+	    Depending on the calibration scheme used, these overheads might vary between 5% for
+	    simple 16cm observations, to 50% for 3mm observations.
+	  </span>
+	  <span>
+	    <label for="integration_selection">Integration Time:</label>
+	    <input type="text" size="4" maxlength="3" value="720" name="integration_selection"
+		   id="integration_selection" /> minutes
+	  </span>
+	  <span>This integration time is spread evenly over the period that the source is above
+	    the elevation limit specified below, or the period either side of transit satisfying
+	    the hour-angle limit specified below, whichever is more limiting.
+	  </span>
+	  <span>
+	    <label for="elevation_selection">Elevation Limit:</label>
+	    <input type="text" size="4" maxlength="2" value="12" name="elevation_selection"
+		   id="elevation_selection" /> degrees
+	  </span>
+	  <span>
+	    <label for="hourangle_selection">Hour-angle Limit:</label>
+	    <input type="text" size="4" maxlength="2" value="6" name="hourangle_selection"
+		   id="hourangle_selection" /> hours
+	  </span>
+	  <span id="limits_errors">
+	  </span>
+	  <span>If you would like the calculator to return velocity ranges and resolutions for
+	    a particular line, please enter its rest frequency here, or select the line from the
+	    drop-down list and press the "Set" button.</span>
+	  <span>
+	    <label for="restfreq_selection">Line Rest Frequency:</label>
+	    <input type="text" name="restfreq_selection" id="restfreq_selection" /> GHz
+	    <select id="restfreq_chooser">
+	      <option value=""></option>
+	      <option value="1.420405752">HI: 1.420405752 GHz</option>
+	      <option value="1.6122310">OH: 1.6122310 GHz</option>
+	      <option value="1.6654018">OH: 1.6654018 GHz</option>
+	      <option value="1.6673590">OH: 1.6673590 GHz</option>
+	      <option value="1.7205300">OH: 1.7205300 GHz</option>
+	      <option value="4.829660">H2CO: 4.829660 GHz</option>
+	      <option value="6.668518">CH3OH: 6.668518 GHz</option>
+	      <option value="9.098332">HC3N: 9.098332 GHz</option>
+	      <option value="12.178593">CH3OH: 12.178593 GHz</option>	      
+	      <option value="14.488490">H2CO: 14.488490 GHz</option>
+	      <option value="18.343145">C3H2: 18.343145 GHz</option>
+	      <option value="22.23507985">H20: 22.23507985 GHz</option>
+	      <option value="23.694506">NH3: 23.694506 GHz</option>
+	      <option value="23.722634">NH3: 23.722634 GHz</option>
+	      <option value="23.870130">NH3: 23.870130 GHz</option>
+	      <option value="42.820570">SiO: 42.820570 GHz</option>
+	      <option value="43.122090">SiO: 43.122090 GHz</option>
+	      <option value="43.423853">SiO: 43.423853 GHz</option>
+	      <option value="48.990964">CS: 48.990964 GHz</option>
+	      <option value="72.039331">DCO+: 72.039331 GHz</option>
+	      <option value="85.640456">SiO: 85.640456 GHz</option>
+	      <option value="86.243442">SiO: 86.243442 GHz</option>
+	      <option value="86.754294">H13CO+: 86.754294 GHz</option>
+	      <option value="86.846998">SiO: 86.846998 GHz</option>
+	      <option value="88.631847">HCN: 88.631847 GHz</option>
+	      <option value="89.188518">HCO+: 89.188518 GHz</option>
+	      <option value="90.663574">HNC: 90.663574 GHz</option>
+	      <option value="93.173809">N2H+: 93.173809 GHz</option>
+	      <option value="97.980968">CS: 97.980968 GHz</option>
+	      <option value="109.782182">C18O: 109.782182 GHz</option>
+	      <option value="110.20137">13CO: 110.20137 GHz</option>
+	      <option value="115.271203">CO: 115.271203 GHz</option>
+	    </select>
+	    <button type="button" id="restfreq_setter">Set</button>
+	</div>
+      </div>
+      <div class="accordion_toggle" id="reduction_toggle">
+	<div class="title_name">Reduction Details</div>
+	<div class="title_setting" id="reduction_setting">Not set</div>
+      </div>
+      <div class="accordion_content">
+	<div id="reduction_select">
+	  <span>The calculator determines the theoretical RMS noise in a resultant image (Stokes I,
+	    Q, U or V), along with the corresponding brightness temperature sensitivity. These
+	    estimates are based on the expressions appearing in the ATNF technical document
+	    <a href="http://www.narrabri.atnf.csiro.au/observing/AT-01.17-025.pdf">AT/01.17/025</a>,
+	    the calculations of antenna efficiency as a function of frequency, revised (CABB-era)
+	    measurements of system temperature as a function of frequency, and simulations of the
+	    effects of different weighting schemes on images made with different ATCA configurations.
+	    In calculating the effects of weighting, 30 second samples and Miriad default cell and
+	    image sizes are assumed.</span>
+	  <span>
+	    <label for="weighting_selection">Image Weighting scheme:</label>
+	    <select name="weighting_selection" id="weighting_selection">
+	      <option value="N">Natural</option>
+	      <option value="R2">Robust=2</option>
+	      <option value="R1">Robust=1</option>
+	      <option value="R0">Robust=0</option>
+	      <option value="R-1">Robust=-1</option>
+	      <option value="R-2">Robust=-2</option>
+	      <option value="U">Uniform</option>
+	      <option value="SU">Superuniform</option>
+	    </select>
+	  </span>
+	  <span>If you wish, you can calculate the effect that boxcar smoothing would
+	    have on the reduced data by selecting a filter width here.</span>
+	  <span>
+	    <label for="boxcar_selection">Smoothing filter width:</label>
+	    <input name="boxcar_selection" id="boxcar_selection" value="1" 
+		   size="4" maxlength="3" />
+	  </span>
+	  <span>The calculator can discard the channels that are normally polluted with
+	    self-generated RFI and known externally-generated RFI. Selecting these two options
+	    is the equivalent of putting "<tt>options=birdie,rfiflag</tt>" into the atlod
+	    Miriad task. You can also choose to
+	    discard any number of edge channels; the analogue filter for CABB makes the
+	    32 MHz on each side of the band noisier.</span>
+	  <span>
+	    <input type="checkbox" name="selfgen_selection" class="rficheckbox" id="selfgen_selection" value="yes" />
+	    <label for="selfgen_selection">Discard self-generated interference (the birdies)</label>
+	  </span>
+	  <span>
+	    <input type="checkbox" name="rfi_selection" class="rficheckbox" id="rfi_selection" value="yes" />
+	    <label for="rfi_selection">Discard known RFI frequency bands</label>
+	  </span>
+	  <span>
+	    <label for="edge_selection">Number of edge channels to discard:</label>
+	    <input type="text" name="edge_selection" id="edge_selection" size="4" maxlength="3"
+		   value="32" />
+	  </span>
+	</div>
+      </div>
+      <div class="accordion_toggle" id="results_toggle">
+	<div class="title_name">Calculation and Results</div>
+	<div class="title_setting" id="results_notready">Not ready</div>
+	<div class="title_setting hidden" id="results_ready">
+	  <button type="button" id="calcsens_button">Calculate Sensitivity</button>
+	</div>
+	<div class="title_setting hidden" id="results_available">Sensitivity Calculation Complete</div>
+      </div>
+      <div class="accordion_content">
+	<div id="results_section">
+	  <h2>Array</h2>
+	  <span class="results_indicator">Using <span class="results" id="results_parameters_n_antenna"></span> antenna forming
+	    <span class="results" id="results_parameters_n_baselines"></span> baselines.</span>
+	  <span class="results_indicator">The antenna efficiency is 
+	    <span class="results" id="results_parameters_antenna_efficiency"></span>
+	    at the central continuum frequency.</span>
+	  <span class="results_indicator">
+	    <h3>Sensitivity</h3>
+	    <span id="resultstable_sensitivities_array"></span>
+	  </span>
+	  <h2>Imaging</h2>
+	  <span class="results_indicator">
+	    All velocities quoted below are with respect to the reference frequency of
+	    <span class="results" id="results_parameters_reference_rest_frequency"></span>.
+	  </span>
+	  <span class="results_indicator">
+	    <span class="results" id="results_source_imaging_weighting_scheme"></span> weighting produces
+	    an RMS noise level equivalent to 
+	    <span class="results" id="results_source_imaging_weighting_factor"></span> times higher than
+	    Natural weighting.</span>
+	  <span class="results_indicator">The field of view at the continuum centre frequency is
+	    <span class="results" id="results_source_imaging_field_of_view"></span>.
+	    <span>At the zoom frequency you specified, the field of view is
+	      <span class="results" id="results_source_imaging_field_of_view_zoom"></span>.
+	  </span>
+	  <span class="results_indicator">The synthesised beam size at the continuum centre frequency is
+	    <span class="results" id="results_source_imaging_synthesised_beam_size"></span><span> if only the five track antenna
+	    are used. Including CA06 would make the synthesised beam
+	      size <span class="results" id="results_source_imaging_synthesised_beam_size_best"></span></span>.
+	  </span>
+	 
+	  <div id="specific_zoom_synthesised" class="hidden">
+	    <span class="results_indicator">The synthesised beam size at the specified zoom band frequency is
+	      <span class="results" id="results_source_imaging_synthesised_beam_size_zoom"></span>.
+	    </span>
+	  </div>
+	  <h2>Continuum Band</h2>
+	  <span class="results_indicator">
+	    The continuum band covers 2048 MHz with a frequency
+	    resolution of <span class="results" id="results_continuum_channel_bandwidth"></span>.
+	    This corresponds to a velocity width of 
+	    <span class="results" id="results_continuum_spectral_bandwidth"></span> at a resolution
+	    of <span class="results" id="results_continuum_spectral_channel_resolution"></span>.
+	    All CABB channels are square, so the frequency/velocity resolution is the same as the channel
+	    separation.
+	  </span>
+	  <span class="results_indicator">
+	    The effective bandwidth of the continuum band, taking flagging into account, is
+	    <span class="results" id="results_continuum_effective_bandwidth"></span>.
+	  </span>
+	  <span class="results_indicator">
+	    <h3>Continuum Sensitivity</h3>
+	    <span>These are the sensitivities of a multi-frequency synthesis image made using the
+	      continuum data.</span>
+	    <span id="resultstable_sensitivities_continuum"></span>
+	  </span>
+	  <span class="results_indicator">
+	    <h3>Spectral Sensitivity</h3>
+	    <span>These are the sensitivities of a cube made with the continuum data, at the quoted frequency resolution.</span>
+	    <span id="resultstable_sensitivities_spectral"></span>
+	  </span>
+	  <span class="results_indicator">
+	    The expected RMS noise varies across the continuum band as shown in the image below. Click the image
+	    to expand it to full size. Red, cross-hatched, frequency ranges in this plot would normally be flagged during the
+	    reduction process.<br />
+	    <img id="continuum_rms_image" />
+	  </span>
+	  <h2>Typical Zoom Band</h2>
+	  <span class="results_indicator">
+	    A typical zoom band made from <span class="results" id="results_zoom_n_zooms"></span> zoom channels, 
+	    within the continuum frequency range has a bandwidth of 
+	    <span class="results" id="results_zoom_zoom_total_bandwidth"></span>,
+	    <span class="results" id="results_zoom_n_channels"></span> channels, and a frequency
+	    resolution of <span class="results" id="results_zoom_zoom_channel_bandwidth"></span>.
+	    The zoom band would therefore have a velocity width of
+	    <span class="results" id="results_zoom_zoom_total_spectral_bandwidth"></span>, 
+	    and a velocity resolution of <span class="results" id="results_zoom_spectral_channel_resolution"></span>.
+	  </span>
+	  <span class="results_indicator">
+	    <h3>Spectral Sensitivity</h3>
+	    <span>These are the sensitivities of a cube made with the data from a typical zoom band,
+	      at the quoted frequency resolution.</span>
+	    <span id="resultstable_sensitivities_zoom"></span>
+	  </span>
+	  <div id="specific_zoom_region" class="hidden">
+	    <h2>Specific Zoom Band</h2>
+	    <span class="results_indicator">
+	      <h3>Sensitivities</h3>
+	      <span id="resultstable_sensitivities_specific_zoom_array"></span>
+	    </span>
+	    <span class="results_indicator">
+	      The zoom band at the specified frequency, made from 
+	      <span class="results" id="results_specific_zoom_n_zooms"></span> zoom channels, has a 
+	      bandwidth of <span class="results" id="results_specific_zoom_zoom_total_bandwidth"></span>,
+	      <span class="results" id="results_specific_zoom_n_channels"></span> channels, and a frequency
+	      resolution of <span class="results" id="results_specific_zoom_zoom_channel_bandwidth"></span>.
+	      The zoom band would therefore have a velocity width of
+	      <span class="results" id="results_specific_zoom_zoom_total_spectral_bandwidth"></span>,
+	      and a velocity resolution of 
+	      <span class="results" id="results_specific_zoom_spectral_channel_resolution"></span>.
+	    </span>
+	    <span class="results_indicator">
+	      <h3>Spectral Sensitivity</h3>
+	      <span>These are the sensitivities of a cube made with the data from the specified zoom band,
+		at the quoted frequency resolution.</span>
+	      <span id="resultstable_sensitivities_specific_zoom"></span>
+	    </span>
+	  </div>
+	</div>
+      </div>
+    </div>
+    
+    <div class="pagefooter">
+      <!--#include virtual="/includefiles/ca_footer.html" -->
+    </div>
+  </body>
+</html>

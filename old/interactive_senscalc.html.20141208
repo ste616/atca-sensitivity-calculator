@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css"
+          href="http://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
+    <link href="http://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/ca_style.css">
+    <link rel="stylesheet" type="text/css" href="css/topcoat-desktop-light.css">
+    <link rel="stylesheet" type="text/css" href="/jslib/dojo/1.9.0/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" type="text/css" href="interactive_senscalc.css">
+    <script src="/jslib/dojo/configure.js"></script>
+    <script src="/jslib/dojo/1.9.0/dojo/dojo.js"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+      });
+    </script>
+    <script type="text/javascript" src="/jslib/mathjax/2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="interactive_senscalc.js"></script>
+    <title>ATCA Sensitivity Calculator - Interactive Version</title>
+  </head>
+  <body class="claro">
+    <!--#include virtual="/includefiles/ca_header.html" -->  
+    <h1>CABB Sensitivity Calculator</h1>
+    <div id="input-data">
+      <h3>Data</h3>
+      <table id="input-data-table">
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The CABB central frequency to use. This frequency will be in the
+		middle of the 2048 MHz CABB band.
+	      </p>
+	      CABB Freq:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="frequency"
+		     value="" name="data-cabb-centralfreq" id="data-cabb-centralfreq" size="10">
+	    <label for="data-cabb-centralfreq"> MHz</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The central frequency of a zoom band that you want to observe.
+		This frequency will be in the centre of the CABB zoom band, the bandwidth of
+		which is the same as the CABB resolution.
+	      </p>
+	      Zoom Freq:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="frequency"
+		     value="" name="data-cabb-zoomfreq" id="data-cabb-zoomfreq" size="10">
+	    <label for="data-cabb-zoomfreq"> MHz</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The array configuration that you want to use. Longer arrays will
+		give better angular resolution, while shorter arrays will give better
+		surface brightness sensitivity. Arrays prefixed with H are "hybrid"
+		arrays, which allow imaging of sources near the celestial equator.
+	      </p>
+	      Array:
+	    </div>
+	  </th>
+	  <td>
+	    <input type="radio" id="data-array-6km" name="data-array" value="6km" checked>
+	    <label for="data-array-6km">6km</label>
+	    <input type="radio" id="data-array-1.5km" name="data-array" value="1.5km">
+	    <label for="data-array-1.5km">1.5km</label>
+	    <input type="radio" id="data-array-750m" name="data-array" value="750m">
+	    <label for="data-array-750m">750m</label>
+	    <input type="radio" id="data-array-367m" name="data-array" value="EW367">
+	    <label for="data-array-367m">EW367</label>
+	    <input type="radio" id="data-array-214m" name="data-array" value="H214">
+	    <label for="data-array-214m">H214</label>
+	    <input type="radio" id="data-array-168m" name="data-array" value="H168">
+	    <label for="data-array-168m">H168</label>
+	    <input type="radio" id="data-array-75m" name="data-array" value="H75">
+	    <label for="data-array-75m">H75</label>
+	    <!-- <div class="topcoat-tab-bar" id="testDebug">
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-array" value="6km" checked>
+		<button class="topcoat-tab-bar__button topcoat-tab-bar__button-squashed" disabled>6km</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-array" value="1.5km">
+		<button class="topcoat-tab-bar__button topcoat-tab-bar__button-squashed" disabled>1.5km</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-array" value="750m">
+		<button class="topcoat-tab-bar__button topcoat-tab-bar__button-squashed" disabled>750m</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-array" value="EW367">
+		<button class="topcoat-tab-bar__button topcoat-tab-bar__button-squashed" disabled>EW367</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-array" value="H214">
+		<button class="topcoat-tab-bar__button topcoat-tab-bar__button-squashed" disabled>H214</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-array" value="H168">
+		<button class="topcoat-tab-bar__button topcoat-tab-bar__button-squashed" disabled>H168</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-array" value="H75">
+		<button class="topcoat-tab-bar__button topcoat-tab-bar__button-squashed" disabled>H75</button>
+	      </label>
+	    </div> -->
+	</td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		Select whether you will use data from antenna 6.
+	      </p>
+	      CA06:
+	    </div>
+	  </th>
+	  <td><label class="topcoat-switch">
+	      <input type="checkbox" class="topcoat-switch__input" id="data-include-ca06" checked>
+	      <div class="topcoat-switch__toggle"></div></label></td></tr>
+	<!-- <tr><th>
+	    <p class="triangle-obtuse">
+	      The number of 4cm receivers that you will use. For future observations,
+	      select 6. For past observations, select the number of 4cm receivers that
+	      were available at the time. This option will only have an effect for CABB
+	      frequencies between 4 and 12 GHz.
+	    </p>
+	    # 4cm:</th>
+	  <td><div class="topcoat-tab-bar">
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-n4cm">
+		<button class="topcoat-tab-bar__button">0</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-n4cm">
+		<button class="topcoat-tab-bar__button">1</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-n4cm">
+		<button class="topcoat-tab-bar__button">2</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-n4cm">
+		<button class="topcoat-tab-bar__button">3</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-n4cm">
+		<button class="topcoat-tab-bar__button">4</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-n4cm">
+		<button class="topcoat-tab-bar__button">5</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-n4cm" checked>
+		<button class="topcoat-tab-bar__button">6</button>
+	      </label>
+	</div></td></tr> -->
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The spectral resolution of the CABB continuum band, and
+		the bandwidth of each of the 16 individual zooms.
+	      </p>
+	      CABB Res:
+	    </div>
+	  </th>
+	  <td>
+	    <input type="radio" id="data-cabb-mode-1" name="data-cabb-mode"
+		   value="CFB1M" checked>
+	    <label for="data-cabb-mode-1">1 MHz</label>
+	    <input type="radio" id="data-cabb-mode-4" name="data-cabb-mode"
+		   value="CFB4M">
+	    <label for="data-cabb-mode-4">4 MHz</label>
+	    <input type="radio" id="data-cabb-mode-16" name="data-cabb-mode"
+		   value="CFB16M">
+	    <label for="data-cabb-mode-16">16 MHz</label>
+	    <input type="radio" id="data-cabb-mode-64" name="data-cabb-mode"
+		   value="CFB64M">
+	    <label for="data-cabb-mode-64">64 MHz</label>
+	    <!-- <div class="topcoat-tab-bar">
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-cabb-mode" value="CFB1M" checked>
+		<button class="topcoat-tab-bar__button">1 MHz</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-cabb-mode" value="CFB4M">
+		<button class="topcoat-tab-bar__button">4 MHz</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-cabb-mode" value="CFB16M">
+		<button class="topcoat-tab-bar__button">16 MHz</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-cabb-mode" value="CFB64M">
+		<button class="topcoat-tab-bar__button">64 MHz</button>
+	      </label> -->
+	    </div>
+	</td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The declination of the source. The calculator requires this
+		parameter so it can determine the likely atmosphere the
+		source will traverse during your observation, and so it can
+		calculate the synthesised beam size.
+	      </p>
+	      Declination:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="declination"
+		     value="-30" name="data-declination" id="data-declination" size="10">
+	    <label for="data-declination"> degrees</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The lowest elevation that you will observe your source at.
+		If you observe your source at lower elevations, you will
+		be able to observe your source for longer on a single day,
+		but the atmospheric conditions will deteriorate.
+	      </p>
+	      El Limit:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="elevation"
+		     value="12" name="data-elevation-limit" id="data-elevation-limit" size="10">
+	    <label for="data-elevation-limit"> degrees</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The furthest hour-angle you will observe your source at (an
+		hour angle of 0 is at transit, when the source is at its
+		highest elevation). Observing over a larger range of HA will
+		result in improved uv-coverage, but may mean observing at
+		lower elevations.
+	      </p>
+	      HA Limit:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="hour-angle"
+		     value="6" name="data-hourangle-limit" id="data-hourangle-limit" size="10">
+	    <label for="data-hourangle-limit"> hours</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The rest frequency of the spectral line you are trying to
+		observe. If this parameter is specified, the calculator will
+		determine the velocity range and resolution of your observations.
+	      </p>
+	      Rest Freq:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="frequency"
+		     value="" name="data-rest-frequency" id="data-rest-frequency" size="10">
+	    <label for="data-rest-frequency"> GHz</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The number of zoom bands used to form a composite zoom.
+	      </p>
+	      # Zooms:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="zooms"
+		     value="1" name="data-nzooms" id="data-nzooms" size="10"></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The weighting scheme used in the imaging process. The factors used
+		by this calculator assume that Miriad's invert is used.
+	      </p>
+	      Weighting:
+	    </div>
+	  </th>
+	  <td>
+	    <input type="radio" id="data-image-weight-N" name="data-image-weight"
+		   value="N" checked>
+	    <label for="data-image-weight-N">Natural</label>
+	    <input type="radio" id="data-image-weight-U" name="data-image-weight"
+		   value="U">
+	    <label for="data-image-weight-U">Uniform</label>
+	    <input type="radio" id="data-image-weight-SU" name="data-image-weight"
+		   value="SU">
+	    <label for="data-image-weight-SU">Superuniform</label>
+	    <input type="radio" id="data-image-weight-R2" name="data-image-weight"
+		   value="R2">
+	    <label for="data-image-weight-R2">Robust=2</label>
+	    <input type="radio" id="data-image-weight-R1" name="data-image-weight"
+		   value="R1">
+	    <label for="data-image-weight-R1">Robust=1</label>
+	    <input type="radio" id="data-image-weight-R0" name="data-image-weight"
+		   value="R0">
+	    <label for="data-image-weight-R0">Robust=0</label>
+	    <input type="radio" id="data-image-weight-R-1" name="data-image-weight"
+		   value="R-1">
+	    <label for="data-image-weight-R-1">Robust=-1</label>
+	    <input type="radio" id="data-image-weight-R-2" name="data-image-weight"
+		   value="R-2">
+	    <label for="data-image-weight-R-2">Robust=-2</label>
+	</td></tr>
+	<!-- <tr><th>&nbsp;</th> -->
+	<!--   <td><div class="topcoat-tab-bar"> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="N" checked> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Natural</button> -->
+	<!--       </label> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="U"> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Uniform</button> -->
+	<!--       </label> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="SU"> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Superuniform</button> -->
+	<!--       </label> -->
+	<!-- </div></td></tr> -->
+	<!-- <tr><th> -->
+	<!--     <div class="input-data-table-help"> -->
+	<!--       <p class="triangle-obtuse"> -->
+	<!-- 	The weighting scheme used in the imaging process. The factors used -->
+	<!-- 	by this calculator assume that Miriad's invert is used. -->
+	<!--       </p> -->
+	<!--       Weighting: -->
+	<!--     </div> -->
+	<!--   </th> -->
+	<!--   <td><div class="topcoat-tab-bar"> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="R2"> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Robust=2</button> -->
+	<!--       </label> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="R1"> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Robust=1</button> -->
+	<!--       </label> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="R0"> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Robust=0</button> -->
+	<!--       </label> -->
+	<!-- </div></td></tr> -->
+	<!-- <tr><th>&nbsp;</th> -->
+	<!--   <td><div class="topcoat-tab-bar"> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="R-1"> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Robust=-1</button> -->
+	<!--       </label> -->
+	<!--       <label class="topcat-tab-bar__item"> -->
+	<!-- 	<input type="radio" name="data-image-weight" value="R-2"> -->
+	<!-- 	<button class="topcoat-tab-bar__button">Robust=-2</button> -->
+	<!--       </label> -->
+	<!-- </div></td></tr> -->
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		The number of frequency channels to average together, using
+		simple averaging. Hanning smoothing is not required for
+		CABB's polyphase filter bank.
+	      </p>
+	      Smoothing:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="width"
+		     value="1" name="data-smoothing" id="data-smoothing" size="10">
+	    <label for="data-smoothing"> channels</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		Remove the internally-generated birdies from the sensitivity
+		calculation. This costs 15 channels in the 1 MHz mode.
+	      </p>
+	      Rem Birdies:
+	    </div>
+	  </th>
+	  <td><label class="topcoat-switch">
+	      <input type="checkbox" class="topcoat-switch__input" id="data-remove-birdies" checked>
+	      <div class="topcoat-switch__toggle"></div></label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		Remove channels that are usually dominated by known,
+		external sources of RFI. This has a varying effect, depending
+		on the frequencies chosen.
+	      </p>
+	      Rem RFI:
+	    </div>
+	  </th>
+	  <td><label class="topcoat-switch">
+	      <input type="checkbox" class="topcoat-switch__input" id="data-remove-rfi" checked>
+	      <div class="topcoat-switch__toggle"></div></label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		Remove this many channels from each edge. The CABB bandpass
+		filters have a half-power width of approximately 32 MHz. Miriad's
+		atlod will by default remove about 100 MHz from each edge.
+	      </p>
+	      Rem Edge:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="width"
+		     value="0" name="data-remove-edge" id="data-remove-edge" size="10">
+	    <label for="data-remove-edge"> channels</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		This setting determines how the calculator operates. If you want to
+		know the sensitivity achieved by a given amount of integration
+		time, select "Integration". If you want to know the integration time
+		required to reach a specified sensitivity, select "Sensitivity".
+	      </p>
+	      Supplied:
+	    </div>
+	  </th>
+	  <td>
+	    <input type="radio" id="data-required-integration" name="data-required"
+		   value="Integration" checked>
+	    <label for="data-required-integration">Integration</label>
+	    <input type="radio" id="data-required-sensitivity" name="data-required"
+		   value="Sensitivity">
+	    <label for="data-required-sensitivity">Sensitivity</label>
+	    <!-- <div class="topcoat-tab-bar">
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-required" value="Integration" checked>
+		<button class="topcoat-tab-bar__button">Integration</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-required" value="Sensitivity">
+		<button class="topcoat-tab-bar__button">Sensitivity</button>
+	      </label>
+	    </div> -->
+	</td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		If you selected "Integration" above, fill in the amount of
+		integration time in this box, in minutes.
+	      </p>
+	      Integration:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="time"
+		     value="720" name="data-integration" id="data-integration" size="10">
+	    <label for="data-integration"> minutes</label></td></tr>
+	<tr><th>
+	    <div class="input-data-table-help">
+	      <p class="triangle-obtuse">
+		If you selected "Sensitivity" above, enter the required 
+		sensitivity in this box and select the appropriate units 
+		(mJy/beam or K). You should then select whether you require
+		this sensitivity for a continuum signal in the 2 GHz band
+		("Continuum"), for a spectral signal in the 2 GHz band
+		("Spectrum"), or for a spectral signal in the zoom band
+		("Zoom"). Finally, select the weather conditions to calculate
+		for.
+	      </p>
+	      Sensitivity:
+	    </div>
+	  </th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="sensitivity"
+		     value="1" name="data-sensitivity" id="data-sensitivity" size="10">
+	    <label for="data-sensitivity">
+	      <input type="radio" id="data-sensitivity-units-mjy" name="data-sensitivity-units"
+		     value="mJy/beam" checked>
+	      <label for="data-sensitivity-units-mjy">mJy/beam</label>
+	      <input type="radio" id="data-sensitivity-units-k" name="data-sensitivity-units"
+		     value="K">
+	      <label for="data-sensitivity-units-k">K</label>
+	      <!-- <div class="topcoat-tab-bar topcoat-tab-bar-inline">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="data-sensitivity-units" value="mJy/beam" checked>
+		  <button class="topcoat-tab-bar__button">mJy/beam</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="data-sensitivity-units" value="K">
+		  <button class="topcoat-tab-bar__button">K</button>
+		</label>
+	      </div> -->
+	</label></td></tr>
+	<tr><th>in:</th>
+	  <td>
+	    <input type="radio" id="data-sensitivity-mode-continuum" name="data-sensitivity-mode"
+		   value="continuum" checked>
+	    <label for="data-sensitivity-mode-continuum">Continuum</label>
+	    <input type="radio" id="data-sensitivity-mode-spectrum" name="data-sensitivity-mode"
+		   value="spectrum">
+	    <label for="data-sensitivity-mode-spectrum">Spectrum</label>
+	    <input type="radio" id="data-sensitivity-mode-zoom" name="data-sensitivity-mode"
+		   value="zoom">
+	    <label for="data-sensitivity-mode-zoom">Zoom</label>
+	    <!-- <div class="topcoat-tab-bar topcoat-tab-bar-inline">
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-sensitivity-mode" value="continuum" checked>
+		<button class="topcoat-tab-bar__button">Continuum</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-sensitivity-mode" value="spectrum">
+		<button class="topcoat-tab-bar__button">Spectrum</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-sensitivity-mode" value="zoom">
+		<button class="topcoat-tab-bar__button">Zoom</button>
+	      </label>
+	    </div> -->
+	</td></tr>
+	<tr><th>with:</th>
+	  <td>
+	    <input type="radio" id="data-sensitivity-weather-good" name="data-sensitivity-weather"
+		   value="good" checked>
+	    <label for="data-sensitivity-weather-good">Good</label>
+	    <input type="radio" id="data-sensitivity-weather-average" name="data-sensitivity-weather"
+		   value="average">
+	    <label for="data-sensitivity-weather-average">Average</label>
+	    <input type="radio" id="data-sensitivity-weather-poor" name="data-sensitivity-weather"
+		   value="poor">
+	    <label for="data-sensitivity-weather-poor">Poor</label>
+	    <!-- <div class="topcoat-tab-bar topcoat-tab-bar-inline">
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-sensitivity-weather" value="good" checked>
+		<button class="topcoat-tab-bar__button">Good</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-sensitivity-weather" value="average">
+		<button class="topcoat-tab-bar__button">Average</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="data-sensitivity-weather" value="poor">
+		<button class="topcoat-tab-bar__button">Poor</button>
+	      </label>
+	    </div> -->
+	    <label> weather</label>
+	</td></tr>
+      </table>
+      <button class="topcoat-button--large--cta" id="data-calculate">
+	Calculate!</button>
+      <button class="topcoat-button--large--cta button-reset-defaults" id="data-reset">
+	Reset to defaults</button>
+    </div>
+    <div id="interview">
+      <div class="interview-panel" id="panel-mode-choice">
+	<h2>What type of observation are you considering?</h2>
+	<div class="option-help">
+	  The mode selected here will determine which panels will be shown
+	  during this process. If you are primarily interested in detecting
+	  a continuum signal in the 2 GHz CABB band, select "Continuum". If
+	  you are primarily interested in detecting a line signal in either
+	  the 2 GHz CABB band or the zoom bands, select "Spectral Line".
+	</div><br />
+	<button class="mode-button topcoat-button--large" id="mode-button-continuum">Continuum</button>
+	<button class="mode-button topcoat-button--large" id="mode-button-spectralline">Spectral Line</button>
+	<br /><br />
+	<div class="option-alert">
+	  <strong>2014-Dec-02:</strong> A bug was found when calculating the times required to reach
+	  a specified sensitivity. This bug only affected the calculator when "Sensitivity"
+	  was selected in the "Supplied" row on the left, and resulted in clearly
+	  erroneous required integration times being reported, along with incorrect velocity
+	  resolutions if smoothing was selected. This bug is now fixed.
+	</div>
+      </div> <!-- #panel-mode-choice -->
+      <div class="interview-panel" id="panel-continuum-frequency">
+	<h2>What will your central frequency be?</h2>
+	<div class="option-help">
+	  The centre of the 2 GHz CABB band can be placed anywhere
+	  within the ranges listed in the table below. The available range
+	  is a combination of the receiver sensitivity and the capabilities
+	  of the local oscillators. The recommended frequencies provide
+	  the best available continuum sensitivity.
+	  <table class="interactive-table-listing">
+	    <tr><th>Band Name</th><th>Range (MHz)</th>
+	      <th>Recommended (MHz)</th></tr>
+	    <tr><td>16cm</td><td>1728 - 2400</td><td>2100</td></tr>
+	    <tr><td>4cm</td><td>4928 - 10928</td><td>5500, 9000</td></tr>
+	    <tr><td>15mm</td><td>16000 - 25000</td><td>17000, 19000</td></tr>
+	    <tr><td>7mm</td><td>30000 - 50000</td><td>33000, 35000, 43000, 45000</td></tr>
+	    <tr><td>3mm</td><td>85000 - 105000</td><td>93000, 95000</td></tr>
+	  </table>
+	  Repeatedly pressing the button for the recommended frequency in a
+	  band with more than one recommended frequency will cycle through
+	  those frequencies.
+	</div><br />
+	<div class="option-equations">
+	  <h3>Relevant Equations</h3>
+	  This parameter is directly involved in the equations for:
+	  <ul>
+	    <li>Primary Beam FWHM = $c / (22\mbox{ m} \times \nu),$<br />where $\nu$ is the
+	      frequency entered here. A higher frequency will result in a smaller
+	      FWHM.</li>
+	    <li>Synthesised Beam semi-minor axis = $(w \times c) / (\nu * B),$<br />
+	      where $\nu$ is the frequency entered here. A higher frequency will result in
+	      a smaller FWHM.</li>
+	  </ul>
+	</div><br />
+	<div class="option-left">
+	  <h3>The recommended frequency for the band</h3>
+	  <div class="button-wrap-div">
+	    <div class="topcoat-button-bar">
+	      <div class="topcoat-button-bar__item">
+		<button class="topcoat-button-bar__button" id="bandselect_16cm">16cm</button>
+	      </div>
+	      <div class="topcoat-button-bar__item">
+		<button class="topcoat-button-bar__button" id="bandselect_4cm">4cm</button>
+	      </div>
+	      <div class="topcoat-button-bar__item">
+		<button class="topcoat-button-bar__button" id="bandselect_15mm">15mm</button>
+	      </div>
+	      <div class="topcoat-button-bar__item">
+		<button class="topcoat-button-bar__button" id="bandselect_7mm">7mm</button>
+	      </div>
+	      <div class="topcoat-button-bar__item">
+		<button class="topcoat-button-bar__button" id="bandselect_3mm">3mm</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="option-or">OR</div>
+	<div class="option-right">
+	  <h3>A specific frequency</h3>
+	  <input type="text" class="topcoat-text-input" placeholder="frequency"
+		 value="" name="interactive-continuum-cabb-centralfreq"
+		 id="interactive-continuum-cabb-centralfreq" size="10">
+	  <label for="interactive-continuum-cabb-centralfreq"> MHz</label>
+	</div>
+	<div class="close-float">&nbsp;</div>
+      </div>
+      <div class="interview-panel" id="panel-array-configuration">
+	<h2>What array do you require?</h2>
+	<div class="option-help">
+	  The array configuration you use will depend on your science
+	  requirements. If you require high angular resolution, then
+	  you should opt for a longer array, and include antenna 6. If
+	  you require sensitivity to extended structure, you should
+	  use a shorter array and omit antenna 6. If you need to image
+	  a source within 10 degrees of the celestial equator, or if
+	  you need to image a line that will be absorbed by the atmosphere
+	  at low elevation, you should select a hybrid array (those
+	  prefixed by "H").
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Array:</th>
+	    <td>
+	      <input type="radio" id="interactive-array-6km" name="interactive-array" value="6km" checked>
+	      <label for="interactive-array-6km">6km</label>
+	      <input type="radio" id="interactive-array-1.5km" name="interactive-array" value="1.5km">
+	      <label for="interactive-array-1.5km">1.5km</label>
+	      <input type="radio" id="interactive-array-750m" name="interactive-array" value="750m">
+	      <label for="interactive-array-750m">750m</label>
+	      <input type="radio" id="interactive-array-367m" name="interactive-array" value="EW367">
+	      <label for="interactive-array-367m">EW367</label>
+	      <input type="radio" id="interactive-array-214m" name="interactive-array" value="H214">
+	      <label for="interactive-array-214m">H214</label>
+	      <input type="radio" id="interactive-array-168m" name="interactive-array" value="H168">
+	      <label for="interactive-array-168m">H168</label>
+	      <input type="radio" id="interactive-array-75m" name="interactive-array" value="H75">
+	      <label for="interactive-array-75m">H75</label>
+	      <!-- <div class="topcoat-tab-bar">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-array" value="6km" checked>
+		  <button class="topcoat-tab-bar__button">6km</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-array" value="1.5km">
+		  <button class="topcoat-tab-bar__button">1.5km</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-array" value="750m">
+		  <button class="topcoat-tab-bar__button">750m</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-array" value="EW367">
+		  <button class="topcoat-tab-bar__button">EW367</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-array" value="H214">
+		  <button class="topcoat-tab-bar__button">H214</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-array" value="H168">
+		  <button class="topcoat-tab-bar__button">H168</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-array" value="H75">
+		  <button class="topcoat-tab-bar__button">H75</button>
+		</label>
+	      </div> -->
+	  </td></tr>
+	  <tr><th>Use CA06:</th>
+	    <td><label class="topcoat-switch">
+		<input type="checkbox" class="topcoat-switch__input" id="interactive-include-ca06" checked>
+		<div class="topcoat-switch__toggle"></div></label></td></tr>
+	  </table>
+      </div>
+      <div class="interview-panel" id="panel-cabb-configuration">
+	<h2>What CABB configuration do you require?</h2>
+	<div class="option-help">
+	  The CABB configuration determines:<br /><br />
+	  <ul>
+	    <li><strong>Spectral resolution in the 2 GHz band</strong>:
+	      The 2048 MHz band is divided up into channels with the width
+	      specified by the CABB configuration. For example, in the 1 MHz
+	      CABB mode, each channel is 1 MHz wide, so there are 2048
+	      channels.</li>
+	    <li><strong>The width of each zoom band</strong>:
+	      Each zoom band has bandwidth equal to the spectral resolution
+	      in the continuum band.</li>
+	    <li><strong>The uv smearing in continuum images</strong>:
+	      As a general rule, it is preferable to choose the 1 MHz
+	      CABB configuration if you want to make a continuum image.
+	      This is to minimise the uv distance in each channel, thus
+	      minimising the uv smearing.</li>
+	  </ul>
+	</div>
+	<table class="interactive-table">
+	  <tr><th>CABB Configuration:</th>
+	    <td>
+	      <input type="radio" id="interactive-cabb-mode-1" name="interactive-cabb-mode"
+		     value="CFB1M" checked>
+	      <label for="interactive-cabb-mode-1">1 MHz</label>
+	      <input type="radio" id="interactive-cabb-mode-4" name="interactive-cabb-mode"
+		     value="CFB4M">
+	      <label for="interactive-cabb-mode-4">4 MHz</label>
+	      <input type="radio" id="interactive-cabb-mode-16" name="interactive-cabb-mode"
+		     value="CFB16M">
+	      <label for="interactive-cabb-mode-16">16 MHz</label>
+	      <input type="radio" id="interactive-cabb-mode-64" name="interactive-cabb-mode"
+		     value="CFB64M">
+	      <label for="interactive-cabb-mode-64">64 MHz</label>
+	      <!-- <div class="topcoat-tab-bar">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cabb-mode" value="CFB1M" checked>
+		  <button class="topcoat-tab-bar__button">1 MHz</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cabb-mode" value="CFB4M">
+		  <button class="topcoat-tab-bar__button">4 MHz</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cabb-mode" value="CFB16M">
+		  <button class="topcoat-tab-bar__button">16 MHz</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cabb-mode" value="CFB64M">
+		  <button class="topcoat-tab-bar__button">64 MHz</button>
+		</label>
+	      </div> -->
+	  </td></tr>
+	</table>
+      </div> <!-- #panel-cabb-configuration -->
+      <div class="interview-panel" id="panel-source-properties">
+	<h2>What is the source declination?</h2>
+	<div class="option-help">
+	  The source declination will determine both the path the
+	  source takes through the atmosphere and the uv coverage
+	  provided by the synthesis observation.
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Declination:</th>
+	    <td><input type="text" class="topcoat-text-input" placeholder="declination"
+	       value="-30" name="interactive-declination" id="interactive-declination" size="10">
+	      <label for="interactive-declination"> degrees</label></td></tr>
+	</table>
+      </div> <!-- #panel-source-properties -->
+      <div class="interview-panel" id="panel-observation-properties">
+	<h2>What are your observation limits?</h2>
+	<div class="option-help">
+	  The antennas can track a source at any elevation above 12
+	  degrees, but the atmosphere becomes thicker and more turbulent
+	  at lower elevations, which degrades the sensitivity. In the
+	  mm bands, it is often better to limit your observations
+	  to elevations above 30 degrees. You can also limit your
+	  observations to a small hour-angle range, if you are
+	  concerned about shadowing in the array you choose
+	  (shadowing diagrams can be found
+	  <a href="http://www.narrabri.atnf.csiro.au/observing/users_guide/html/new_atug_58.html#Shadowing-Diagrams">
+	    here</a>). The calculator will use whichever of the two
+	  limits is more stringent.
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Elevation Limit:</th>
+	    <td><input type="text" class="topcoat-text-input" placeholder="elevation"
+		       value="12" name="interactive-elevation-limit" id="interactive-elevation-limit" size="10">
+	      <label for="interactive-elevation-limit"> degrees</label></td></tr>
+	  <tr><th>Hour-angle Limit:</th>
+	    <td><input type="text" class="topcoat-text-input" placeholder="hour-angle"
+		       value="6" name="interactive-hourangle-limit" id="interactive-hourangle-limit" size="10">
+	      <label for="interactive-hourangle-limit"> hours</label></td></tr>
+	</table>
+      </div> <!-- #panel-observation-properties -->
+      <div class="interview-panel" id="panel-calculation-mode">
+	<h2>What calculation do you require?</h2>
+	<div class="option-help">
+	  The calculator can be operated in one of two modes, depending
+	  on the information you provide:
+	  <ul>
+	    <li>By selecting "Integration", the calculator will return
+	      the sensitivity of an observation with the integration time
+	      you supply.</li>
+	    <li>By selecting "Sensitivity", the calculator will return
+	      the integration time required to reach the sensitivity
+	      you supply.</li>
+	  </ul>
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Calculation Type:</th>
+	    <td>
+	      <input type="radio" id="interactive-required-integration" name="interactive-required"
+		     value="Integration" checked>
+	      <label for="interactive-required-integration">Integration</label>
+	      <input type="radio" id="interactive-required-sensitivity" name="interactive-required"
+		     value="Sensitivity">
+	      <label for="interactive-required-sensitivity">Sensitivity</label>
+	      <!-- <div class="topcoat-tab-bar">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-required" value="Integration" checked>
+		  <button class="topcoat-tab-bar__button">Integration</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-required" value="Sensitivity">
+		  <button class="topcoat-tab-bar__button">Sensitivity</button>
+		</label>
+	      </div> -->
+	  </td></tr>
+	</table>
+      </div> <!-- #panel-calculation-mode -->
+      <div class="interview-panel" id="panel-integration-time">
+	<h2>How much integration time will you have?</h2>
+	<div class="option-help">
+	  Here you should specify, in minutes, the amount of integration
+	  time you will spend on your target source. The calculator will
+	  spread this time evenly over the hour-angle range you have
+	  allowed.
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Integration Time:</th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="time"
+		     value="720" name="interactive-integration" id="interactive-integration" size="10">
+	    <label for="interactive-integration"> minutes</label></td></tr>
+	</table>
+      </div> <!-- #panel-integration-time -->
+      <div class="interview-panel" id="panel-sensitivity-required">
+	<h2>What sensitivity do you require?</h2>
+	<div class="option-help">
+	  Here you need to provide the sensitivity you require your
+	  observations to have, in your required band, and under the
+	  conditions you specify.<br />
+	  Put the sensitivity in the entry box,
+	  and select the appropriate units (mJy/beam for a spectral
+	  or continuum signal, or Kelvin for surface brightness).
+	  <br />
+	  Then select the band in which you require the sensitivity,
+	  from "Continuum" (a continuum signal in the 2 GHz band),
+	  "Spectrum" (a spectral signal in the 2 GHz band), or
+	  "Zoom" (a spectral signal in the zoom band).
+	  <br />
+	  Finally, choose the weather conditions to assume for the
+	  calculation, from "Good", "Average" or "Poor".
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Required Sensitivity:</th>
+	    <td>
+	      <input type="text" class="topcoat-text-input" placeholder="sensitivity"
+		       value="1" name="interactive-sensitivity" id="interactive-sensitivity" size="10">
+	      <label for="interactive-sensitivity">
+		<input type="radio" id="interactive-sensitivity-units-mjy" name="interactive-sensitivity-units"
+		       value="mJy/beam" checked>
+		<label for="interactive-sensitivity-units-mjy">mJy/beam</label>
+		<input type="radio" id="interactive-sensitivity-units-k" name="interactive-sensitivity-units"
+		       value="K">
+		<label for="interactive-sensitivity-units-k">K</label>
+		<!-- <div class="topcoat-tab-bar topcoat-tab-bar-inline">
+		  <label class="topcat-tab-bar__item">
+		    <input type="radio" name="interactive-sensitivity-units" 
+			   value="mJy/beam" checked>
+		    <button class="topcoat-tab-bar__button">mJy/beam</button>
+		  </label>
+		  <label class="topcat-tab-bar__item">
+		    <input type="radio" name="interactive-sensitivity-units" value="K">
+		    <button class="topcoat-tab-bar__button">K</button>
+		  </label>
+		</div> -->
+	      </label>
+	  </td></tr>
+	  <tr><th>Required Band:</th>
+	  <td>
+	    <input type="radio" id="interactive-sensitivity-mode-continuum" name="interactive-sensitivity-mode"
+		   value="continuum" checked>
+	    <label for="interactive-sensitivity-mode-continuum">Continuum</label>
+	    <input type="radio" id="interactive-sensitivity-mode-spectrum" name="interactive-sensitivity-mode"
+		   value="spectrum">
+	    <label for="interactive-sensitivity-mode-spectrum">Spectrum</label>
+	    <input type="radio" id="interactive-sensitivity-mode-zoom" name="interactive-sensitivity-mode"
+		   value="zoom">
+	    <label for="interactive-sensitivity-mode-zoom">Zoom</label>
+	    <!-- <div class="topcoat-tab-bar topcoat-tab-bar-inline">
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="interactive-sensitivity-mode" value="continuum" checked>
+		<button class="topcoat-tab-bar__button">Continuum</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="interactive-sensitivity-mode" value="spectrum">
+		<button class="topcoat-tab-bar__button">Spectrum</button>
+	      </label>
+	      <label class="topcat-tab-bar__item">
+		<input type="radio" name="interactive-sensitivity-mode" value="zoom">
+		<button class="topcoat-tab-bar__button">Zoom</button>
+	      </label>
+	    </div> -->
+	  </td></tr>
+	  <tr><th>Weather Conditions:</th>
+	    <td>
+	    <input type="radio" id="interactive-sensitivity-weather-good" name="interactive-sensitivity-weather"
+		   value="good" checked>
+	    <label for="interactive-sensitivity-weather-good">Good</label>
+	    <input type="radio" id="interactive-sensitivity-weather-average" name="interactive-sensitivity-weather"
+		   value="average">
+	    <label for="interactive-sensitivity-weather-average">Average</label>
+	    <input type="radio" id="interactive-sensitivity-weather-poor" name="interactive-sensitivity-weather"
+		   value="poor">
+	    <label for="interactive-sensitivity-weather-poor">Poor</label>
+	      <!-- <div class="topcoat-tab-bar topcoat-tab-bar-inline">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-sensitivity-weather" 
+			 value="good" checked>
+		  <button class="topcoat-tab-bar__button">Good</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-sensitivity-weather" value="average">
+		  <button class="topcoat-tab-bar__button">Average</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-sensitivity-weather" value="poor">
+		  <button class="topcoat-tab-bar__button">Poor</button>
+		</label>
+	      </div> -->
+	  </td></tr>
+	</table>
+      </div> <!-- #panel-sensitivity-required -->
+      <div class="interview-panel" id="panel-flagging">
+	<h2>How much flagging will you do?</h2>
+	<div class="option-help">
+	  The calculator can estimate the likely amount of flagging that will
+	  need to be done to prevent both self-generated and external
+	  RFI from corrupting the images you make. You can disable any flagging
+	  that you don't want here. The three types of flagging listed here are:<br />
+	  <br />
+	  <ul>
+	    <li><strong>Birdies:</strong> the birdies are self-generated,
+	      single-channel spikes that always occur in the same channels
+	      regardless of the frequency being observed.</li>
+	    <li><strong>RFI:</strong> known emitters in the local area that
+	      corrupt the spectrum most of the time; RFI that is only
+	      occasionally present (eg. weather radar) will not be counted
+	      in this item.</li>
+	    <li><strong>Edge channels:</strong> the CABB bandpass filter
+	      degrades the sensitivity at the edges of the band; the sensitivity
+	      of the 32 MHz on each edge is most affected.</li>
+	  </ul>
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Birdies:</th>
+	    <td><label class="topcoat-switch">
+		<input type="checkbox" class="topcoat-switch__input" id="interactive-remove-birdies" checked>
+		<div class="topcoat-switch__toggle"></div></label></td></tr>
+	  <tr><th>RFI:</th>
+	    <td><label class="topcoat-switch">
+		<input type="checkbox" class="topcoat-switch__input" id="interactive-remove-rfi" checked>
+		<div class="topcoat-switch__toggle"></div></label></td></tr>
+	  <tr><th>Edge channels:</th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="width"
+		     value="0" name="interactive-remove-edge" id="interactive-remove-edge" size="10"></td></tr>
+	</table>
+      </div> <!-- #panel-flagging -->
+      <div class="interview-panel" id="panel-spectral-frequency">
+	<h2>What is the frequency of the line you want to observe?</h2>
+	<div class="option-help">
+	  To observe a line in either the 2 GHz CABB band or one of the zoom
+	  bands, it has to lie within 1024 MHz of the CABB central frequency, which
+	  in turn has to be within the range listed in the table below. A suitable
+	  CABB central frequency will be chosen automatically once you specify your
+	  line frequency.
+	  <table class="interactive-table-listing">
+	    <tr><th>Band Name</th><th>Range (MHz)</th></tr>
+	    <tr><td>16cm</td><td>1728 - 2400</td></tr>
+	    <tr><td>4cm</td><td>4928 - 10928</td></tr>
+	    <tr><td>15mm</td><td>16000 - 25000</td></tr>
+	    <tr><td>7mm</td><td>30000 - 50000</td></tr>
+	    <tr><td>3mm</td><td>85000 - 105000</td></tr>
+	  </table>
+	  If you specify the rest frequency of the line you are attempting
+	  to observe, the calculator will be able to calculate the velocity
+	  width and resolution of your observations.<br /><br />
+	  You should also specify whether you expect to use the 2 GHz CABB
+	  spectral band to detect the line, or one or more of the CABB zoom bands.
+	</div><br />
+	<div class="option-equations">
+	  <h3>Relevant Equations</h3>
+	  These parameters are directly involved in the equations for:
+	  <ul>
+	    <li>Primary Beam FWHM = $c / (22\mbox{ m} \times \nu),$<br />where $\nu$ is the
+	      line frequency entered here. A higher frequency will result in a smaller
+	      FWHM.</li>
+	    <li>Synthesised Beam semi-minor axis = $(w \times c) / (\nu * B),$<br />
+	      where $\nu$ is the line frequency entered here. A higher frequency will result in
+	      a smaller FWHM.</li>
+	    <li>Velocity coverage = $(\mbox{BW} \times c) / \nu_{\rm rest},$<br />
+	      where $\nu_{\rm rest}$ is the line rest frequency entered here. A higher rest
+	      frequency will result in a smaller velocity coverage.</li>
+	    <li>Velocity resolution = $(\Delta\nu \times s_{\rm chan} \times c) / \nu_{\rm rest},$<br />
+	      where $\nu_{\rm rest}$ is the line rest frequency entered here. A higher rest
+	      frequency will result in an increased velocity resolution.</li>
+	  </ul>
+	</div><br />
+	<table class="interactive-table">
+	  <tr><th>Observed Line frequency:</th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="frequency"
+		     value="" name="interactive-cabb-spectralfreq"
+		     id="interactive-cabb-spectralfreq" size="10">
+	    <label for="interactive-cabb-spectralfreq"> MHz</label></td></tr>
+	  <tr><th>Line Frequency:</th>
+	    <td><input name="interactive-line-frequency" id="interactive-line-frequency">
+	      <label for="interactive-line-frequency"> GHz</label></td></tr>
+	  <tr><th>Detection band:</th>
+	    <td>
+	      <input type="radio" id="interactive-spectralband-spectral" name="interactive-spectralband"
+		     value="spectral" checked>
+	      <label for="interactive-spectralband-spectral">Spectral</label>
+	      <input type="radio" id="interactive-spectralband-zoom" name="interactive-spectralband"
+		     value="zoom">
+	      <label for="interactive-spectralband-zoom">Zoom</label>
+	      <!-- <div class="topcoat-tab-bar topcoat-tab-bar-inline">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-spectralband" 
+			 value="spectral" checked>
+		  <button class="topcoat-tab-bar__button">Spectral</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-spectralband"
+			 value="zoom">
+		  <button class="topcoat-tab-bar__button">Zoom</button>
+		</label>
+	      </div> -->
+	  </td></tr>
+	  <tr><th>Number of zooms:</th>
+	    <td><input type="text" class="topcoat-text-input" placeholder="zooms"
+		       value="1" name="interactive-nzooms" id="interactive-nzooms" size="10"></td></tr>
+	</table>
+      </div> <!-- #panel-spectral-flagging -->
+      <div class="interview-panel" id="panel-continuum-imaging">
+	<h2>How will you make your image?</h2>
+	<div class="option-help">
+	  Assuming that you are making a multi-frequency-synthesis image from
+	  these data with Miriad's invert task, you will be asked to select
+	  a data weighting scheme. The choice of scheme will change the
+	  resolution and sensitivity of the resulting images. The choices are:
+	  <br /><br />
+	  <ul>
+	    <li><strong>Natural</strong>: This gives an equal weight to each
+	      visibility (assuming each visibility has the same noise), and will
+	      give optimum sensitivity to point sources. The synthesised beam shape
+	      and sidelobe levels can be poor though, which makes deconvolution
+	      more difficult.</li>
+	    <li><strong>Uniform</strong>: This weights the visibilities
+	      proportionally to the number of visibilities in each resolution
+	      element, which minimises the sidelobe level in the synthesised
+	      beam, at the cost of a higher noise level.</li>
+	    <li><strong>Superuniform</strong>: While uniform weighting minimises
+	      the sidelobe level over the region that you are imaging,
+	      superuniform weighting can minimise the sidelobe level over a
+	      region that you specify, be it smaller or larger than the
+	      imaged field.</li>
+	    <li><strong>Robust</strong>: This tries to give an optimal
+	      compromise between the noise levels obtainable with natural
+	      weighting, and the sidelobe levels obtainable with uniform
+	      weighting. A robust level of 2 minimises the noise only, while
+	      a level of -2 only minimises the sidelobe level.</li>
+	  </ul><br />
+	  More complete information about the available image weighting schemes
+	  can be found
+	  <a href="http://www.atnf.csiro.au/computing/software/miriad/userguide/node107.html">
+	    here</a>.
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Weighting scheme:</th>
+	    <td>
+	      <input type="radio" id="interactive-image-weight-N" name="interactive-image-weight"
+		     value="N" checked>
+	      <label for="interactive-image-weight-N">Natural</label>
+	      <input type="radio" id="interactive-image-weight-U" name="interactive-image-weight"
+		     value="U">
+	      <label for="interactive-image-weight-U">Uniform</label>
+	      <input type="radio" id="interactive-image-weight-SU" name="interactive-image-weight"
+		     value="SU">
+	      <label for="interactive-image-weight-SU">Superuniform</label>
+	      <!-- <div class="topcoat-tab-bar">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="N" checked>
+		  <button class="topcoat-tab-bar__button">Natural</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="U">
+		  <button class="topcoat-tab-bar__button">Uniform</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="SU">
+		  <button class="topcoat-tab-bar__button">Superuniform</button>
+		</label>
+	      </div> -->
+	  </td></tr>
+	  <tr><th>&nbsp</th>
+	    <td>
+	      <input type="radio" id="interactive-image-weight-R2" name="interactive-image-weight"
+		     value="R2">
+	      <label for="interactive-image-weight-R2">Robust=2</label>
+	      <input type="radio" id="interactive-image-weight-R1" name="interactive-image-weight"
+		     value="R1">
+	      <label for="interactive-image-weight-R1">Robust=1</label>
+	      <input type="radio" id="interactive-image-weight-R0" name="interactive-image-weight"
+		     value="R0">
+	      <label for="interactive-image-weight-R0">Robust=0</label>
+	      <input type="radio" id="interactive-image-weight-R-1" name="interactive-image-weight"
+		     value="R-1">
+	      <label for="interactive-image-weight-R-1">Robust=-1</label>
+	      <input type="radio" id="interactive-image-weight-R-2" name="interactive-image-weight"
+		     value="R-2">
+	      <label for="interactive-image-weight-R-2">Robust=-2</label>
+	      <!-- <div class="topcoat-tab-bar">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="R2">
+		  <button class="topcoat-tab-bar__button">Robust=2</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="R1">
+		  <button class="topcoat-tab-bar__button">Robust=1</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="R0">
+		  <button class="topcoat-tab-bar__button">Robust=0</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="R-1">
+		  <button class="topcoat-tab-bar__button">Robust=-1</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-image-weight" value="R-2">
+		  <button class="topcoat-tab-bar__button">Robust=-2</button>
+		</label>
+	      </div> -->
+	  </td></tr>
+	</table>
+
+      </div> <!-- #panel-continuum-imaging -->
+      <div class="interview-panel" id="panel-spectral-imaging">
+	<h2>How will you make your image?</h2>
+	<div class="option-help">
+	  Assuming that you are making a cube from
+	  these data with Miriad's invert task, you will be asked to select
+	  a data weighting scheme and the number of channels to combine to form
+	  a single output plane. The choice of weighting scheme will change the
+	  resolution and sensitivity of the resulting images. The choices are:
+	  <br /><br />
+	  <ul>
+	    <li><strong>Natural</strong>: This gives an equal weight to each
+	      visibility (assuming each visibility has the same noise), and will
+	      give optimum sensitivity to point sources. The synthesised beam shape
+	      and sidelobe levels can be poor though, which makes deconvolution
+	      more difficult.</li>
+	    <li><strong>Uniform</strong>: This weights the visibilities
+	      proportionally to the number of visibilities in each resolution
+	      element, which minimises the sidelobe level in the synthesised
+	      beam, at the cost of a higher noise level.</li>
+	    <li><strong>Superuniform</strong>: While uniform weighting minimises
+	      the sidelobe level over the region that you are imaging,
+	      superuniform weighting can minimise the sidelobe level over a
+	      region that you specify, be it smaller or larger than the
+	      imaged field.</li>
+	    <li><strong>Robust</strong>: This tries to give an optimal
+	      compromise between the noise levels obtainable with natural
+	      weighting, and the sidelobe levels obtainable with uniform
+	      weighting. A robust level of 2 minimises the noise only, while
+	      a level of -2 only minimises the sidelobe level.</li>
+	  </ul><br />
+	  More complete information about the available image weighting schemes
+	  can be found
+	  <a href="http://www.atnf.csiro.au/computing/software/miriad/userguide/node107.html">
+	    here</a>.<br /><br />
+	  If you require a lower noise level in each output plane, and you don't
+	  require the resolution provided by the CABB channelisation, then you
+	  may want to choose to smooth your data in the imaging process. With CABB's
+	  polyphase filterbank design, Hanning smoothing is not required.
+	</div>
+	<table class="interactive-table">
+	  <tr><th>Weighting scheme:</th>
+	    <td>
+	      <div class="topcoat-tab-bar">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="N" checked>
+		  <button class="topcoat-tab-bar__button">Natural</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="U">
+		  <button class="topcoat-tab-bar__button">Uniform</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="SU">
+		  <button class="topcoat-tab-bar__button">Superuniform</button>
+		</label>
+	  </div></td></tr>
+	  <tr><th>&nbsp</th>
+	    <td>
+	      <div class="topcoat-tab-bar">
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="R2">
+		  <button class="topcoat-tab-bar__button">Robust=2</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="R1">
+		  <button class="topcoat-tab-bar__button">Robust=1</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="R0">
+		  <button class="topcoat-tab-bar__button">Robust=0</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="R-1">
+		  <button class="topcoat-tab-bar__button">Robust=-1</button>
+		</label>
+		<label class="topcat-tab-bar__item">
+		  <input type="radio" name="interactive-cube-weight" value="R-2">
+		  <button class="topcoat-tab-bar__button">Robust=-2</button>
+		</label>
+	  </div></td></tr>
+	  <tr><th>Smoothing:</th>
+	  <td><input type="text" class="topcoat-text-input" placeholder="width"
+		     value="1" name="interactive-smoothing" id="interactive-smoothing" size="10">
+	    <label for="interactive-smoothing"> channels</label></td></tr>
+	</table>
+      </div> <!-- #panel-spectral-imaging -->
+      <div class="interview-panel" id="panel-calculate-button">
+	<h2>Ready to calculate!</h2>
+	<div class="option-help">
+	  You're now ready to get your results. Please check the data on the
+	  left to ensure that the settings are as you expect. If you need to change
+	  something, you can edit the data as necessary, or you can also go back
+	  to previous questions using the "Previous Question" link at the bottom
+	  of this panel.
+	</div>
+	<button class="topcoat-button--large--cta" id="interactive-calculate">
+	  Calculate!</button>
+      </div> <!-- #panel-calculate-button -->
+      <div class="interview-panel" id="panel-results-summary">
+	<h2>Sensitivity Summary</h2>
+	<div>
+	  <table class="results-summary-chooser">
+	    <tr>
+	      <td id="results-summary-chooser-continuum" class="choice-continuum">Continuum</td>
+	      <td id="results-summary-chooser-spectral" class="choice-spectral">Spectral</td>
+	      <td id="results-summary-chooser-zoom" class="choice-zoom">Zoom</td>
+	    </tr>
+	  </table>
+	</div>
+	<div class="results-summary choice-continuum" id="results-summary-continuum-integration">
+	  <ul>
+	    <li>With <span id="results-summary-continuum-integration-time"></span>
+	      of on-source integration time,</li>
+	    <li>in good weather,</li>
+	    <li>in the 2 GHz band centred at a frequency of
+	      <span id="results-summary-continuum-integration-centralfreq"></span>,</li>
+	    <li>in a continuum image made with 
+	      <span id="results-summary-continuum-integration-weighting"></span>
+	      weighting,</li>
+	  </ul>
+	  <p>you will achieve
+	    <ul>
+	      <li>a surface brightness sensitivity of
+		<span id="results-summary-continuum-integration-surfacebrightness"></span>,</li>
+	      <li>and an RMS noise level of
+		<span id="results-summary-continuum-integration-sensitivity"></span>.</li>
+	    </ul>
+	  </p>
+	</div> <!-- #results-summary-continuum-integration -->
+	<div class="results-summary choice-continuum" id="results-summary-continuum-sensitivity">
+	  <p>To make a continuum image</p>
+	  <ul>
+	    <li>in <span id="results-summary-continuum-sensitivity-weather"></span> weather,</li>
+	    <li>in the 2 GHz band centred at a frequency of
+	      <span id="results-summary-continuum-sensitivity-centralfreq"></span>,</li>
+	    <li>with <span id="results-summary-continuum-sensitivity-weighting"></span>
+	      weighting,</li>
+	    <li>with a surface brightness sensitivity of
+	      <span id="results-summary-continuum-sensitivity-surfacebrightness"></span>,</li>
+	    <li>or an RMS noise level of
+	      <span id="results-summary-continuum-sensitivity-sensitivity"></span>,</li>
+	  </ul>
+	  <p>will require <span id="results-summary-continuum-sensitivity-time"></span>
+	    of on-source integration time.</p>
+	</div> <!-- #results-summary-continuum-sensitivity -->
+
+	<div class="results-summary choice-spectral" id="results-summary-spectral-integration">
+	  <ul>
+	    <li>With <span id="results-summary-spectral-integration-time"></span>
+	      of on-source integration time,</li>
+	    <li>in good weather,</li>
+	    <li>in the 2 GHz band centred at a frequency of
+	      <span id="results-summary-spectral-integration-centralfreq"></span>,</li>
+	    <li>in a cube made with 
+	      <span id="results-summary-spectral-integration-weighting"></span>
+	      weighting,</li>
+	  </ul>
+	  <p>each plane will have
+	    <ul>
+	      <li>a velocity width of
+		<span id="results-summary-spectral-integration-channelwidth"></span>,</li>
+	      <li>a surface brightness sensitivity of
+		<span id="results-summary-spectral-integration-surfacebrightness"></span>,</li>
+	      <li>and an RMS noise level of
+		<span id="results-summary-spectral-integration-sensitivity"></span>.</li>
+	    </ul>
+	  </p>
+	</div> <!-- results-summary-spectral-integration -->
+	<div class="results-summary choice-spectral" id="results-summary-spectral-sensitivity">
+	  <p>To make a cube</p>
+	  <ul>
+	    <li>in <span id="results-summary-spectral-sensitivity-weather"></span> weather,</li>
+	    <li>using the 2 GHz band centred at a frequency of
+	      <span id="results-summary-spectral-sensitivity-centralfreq"></span>,</li>
+	    <li>with <span id="results-summary-spectral-sensitivity-weighting"></span>
+	      weighting,</li>
+	  </ul>
+	  <p>with each plane having a</p>
+	  <ul>
+	    <li>a velocity width of
+	      <span id="results-summary-spectral-sensitivity-channelwidth"></span>,</li>
+	    <li>a surface brightness sensitivity of
+	      <span id="results-summary-spectral-sensitivity-surfacebrightness"></span>,</li>
+	    <li>or an RMS noise level of
+	      <span id="results-summary-spectral-sensitivity-sensitivity"></span>,</li>
+	  </ul>
+	  <p>will require <span id="results-summary-spectral-sensitivity-time"></span>
+	    of on-source integration time.</p>
+	</div> <!-- #results-summary-spectral-sensitivity -->
+
+	<div class="results-summary choice-zoom" id="results-summary-zoom-integration">
+	  <ul>
+	    <li>With <span id="results-summary-zoom-integration-time"></span>
+	      of on-source integration time,</li>
+	    <li>in good weather,</li>
+	    <li>in the zoom band made up of 
+	      <span id="results-summary-zoom-integration-nzooms"></span> individual zoom
+	      channels, and centred at a frequency of
+	      <span id="results-summary-zoom-integration-centralfreq"></span>,</li>
+	    <li>in a cube made with 
+	      <span id="results-summary-zoom-integration-weighting"></span>
+	      weighting,</li>
+	  </ul>
+	  <p>each plane will have
+	    <ul>
+	      <li>a velocity width of
+		<span id="results-summary-zoom-integration-channelwidth"></span>,</li>
+	      <li>a surface brightness sensitivity of
+		<span id="results-summary-zoom-integration-surfacebrightness"></span>,</li>
+	      <li>and an RMS noise level of
+		<span id="results-summary-zoom-integration-sensitivity"></span>.</li>
+	    </ul>
+	  </p>
+	</div> <!-- results-summary-zoom-integration -->
+	<div class="results-summary choice-zoom" id="results-summary-zoom-sensitivity">
+	  <p>To make a cube</p>
+	  <ul>
+	    <li>in <span id="results-summary-zoom-sensitivity-weather"></span> weather,</li>
+	    <li>using the zoom band made up of
+	      <span id="results-summary-zoom-sensitivity-nzooms"></span> individual zoom
+	      bands, and centred at a frequency of
+	      <span id="results-summary-zoom-sensitivity-centralfreq"></span>,</li>
+	    <li>with <span id="results-summary-zoom-sensitivity-weighting"></span>
+	      weighting,</li>
+	  </ul>
+	  <p>with each plane having a</p>
+	  <ul>
+	    <li>a velocity width of
+	      <span id="results-summary-zoom-sensitivity-channelwidth"></span>,</li>
+	    <li>a surface brightness sensitivity of
+	      <span id="results-summary-zoom-sensitivity-surfacebrightness"></span>,</li>
+	    <li>or an RMS noise level of
+	      <span id="results-summary-zoom-sensitivity-sensitivity"></span>,</li>
+	  </ul>
+	  <p>will require <span id="results-summary-zoom-sensitivity-time"></span>
+	    minutes of on-source integration time.</p>
+	</div> <!-- #results-summary-zoom-sensitivity -->
+	<div class="navigation-permanent">
+	  <div class="navigation-previous">
+	    <div class="results-interview-restart">
+	      &lt;&lt;&lt; Restart questionnaire</div>
+	    <div class="results-interview-reset-restart">
+	      &lt;&lt;&lt; Reset questionnaire</div>
+	  </div>
+	  <div class="navigation-next">
+	    <div class="results-array-panel">
+	      Array Information &gt;&gt;&gt;</div>
+	    <div class="results-continuum-panel">
+	      Continuum Information &gt;&gt;&gt;</div>
+	    <div class="results-spectrum-panel">
+	      Spectral Information &gt;&gt;&gt;</div>
+	    <div class="results-zoom-panel">
+	      Zoom Information &gt;&gt;&gt;</div>
+	  </div>
+	</div>
+      </div> <!-- #panel-results-summary -->
+      <div class="interview-panel" id="panel-results-array">
+	<h2>Array Information</h2>
+	<table class="results-parameter-table">
+	  <caption>Array Configuration</caption>
+	  <tr><th>Number of Antenna:</th>
+	    <td id="results-array-nantenna"></td></tr>
+	  <tr><th>Number of Baselines:</th>
+	    <td id="results-array-nbaselines"></td></tr>
+	  <tr><th>Longest Baseline:</th>
+	    <td><span id="results-array-longestbaseline"></span> m</td></tr>
+	  <tr><th>Antenna Efficiency:</th>
+	    <td id="results-array-efficiency"></td></tr>
+	</table>
+	<table class="results-parameter-table">
+	  <caption>Array Sensitivity</caption>
+	  <thead>
+	    <tr><td></td><th>Good Weather</th>
+	      <th>Average Weather</th>
+	      <th>Poor Weather</th></tr>
+	  </thead>
+	  <tbody>
+	    <tr><th>System Temperature</th>
+	      <td id="results-array-systemtemperature-goodweather"></td>
+	      <td id="results-array-systemtemperature-averageweather"></td>
+	      <td id="results-array-systemtemperature-poorweather"></td>
+	    </tr>
+	    <tr><th>Antenna Sensitivity</th>
+	      <td id="results-array-antennasensitivity-goodweather"></td>
+	      <td id="results-array-antennasensitivity-averageweather"></td>
+	      <td id="results-array-antennasensitivity-poorweather"></td>
+	    </tr>
+	    <tr><th>Array Sensitivity</th>
+	      <td id="results-array-arraysensitivity-goodweather"></td>
+	      <td id="results-array-arraysensitivity-averageweather"></td>
+	      <td id="results-array-arraysensitivity-poorweather"></td>
+	    </tr>
+	  </tbody>
+	</table>
+	<div class="navigation-permanent">
+	  <div class="navigation-previous">
+	    <div class="results-interview-restart">
+	      &lt;&lt;&lt; Restart questionnaire</div>
+	    <div class="results-interview-reset-restart">
+	      &lt;&lt;&lt; Reset questionnaire</div>
+	    <div class="results-summary-panel">
+	      &lt;&lt;&lt; Sensitivity Summary</div>
+	  </div>
+	  <div class="navigation-next">
+	    <div class="results-continuum-panel">
+	      Continuum Information &gt;&gt;&gt;</div>
+	    <div class="results-spectrum-panel">
+	      Spectral Information &gt;&gt;&gt;</div>
+	    <div class="results-zoom-panel">
+	      Zoom Information &gt;&gt;&gt;</div>
+	  </div>
+	</div>
+      </div> <!-- #panel-results-array -->
+      <div class="interview-panel" id="panel-results-continuum">
+	<h2>Continuum Information</h2>
+	<table class="results-parameter-table">
+	  <caption>Continuum Image Parameters</caption>
+	  <tr><th>Weighting:</th>
+	    <td id="results-continuum-weighting"></td></tr>
+	  <tr><th>Weighting Factor:</th>
+	    <td><span id="results-continuum-weightingfactor"></span> x Natural</td></tr>
+	  <tr><th>Primary Beam FWHM:</th>
+	    <td id="results-continuum-primarybeam"></td></tr>
+	  <tr><th>Synthesised Beam FWHM:</th>
+	    <td><span id="results-continuum-synthesisedbeam"></span>
+	      <span id="results-continuum-synthesisedbeambest"></span>
+	  </td></tr>
+	  <tr><th>Central Frequency:</th>
+	    <td id="results-continuum-centralfrequency"></td></tr>
+	  <tr><th>Effective Bandwidth:</th>
+	    <td id="results-continuum-effectivebandwidth"></td></tr>
+	</table>
+	<table class="results-parameter-table">
+	  <caption>Continuum Image Sensitivity</caption>
+	  <thead>
+	    <tr><td></td><th>Good Weather</th>
+	      <th>Average Weather</th>
+	      <th>Poor Weather</th></tr>
+	  </thead>
+	  <tbody>
+	    <tr><th>RMS noise level</th>
+	      <td id="results-continuum-rmsnoiselevel-goodweather"></td>
+	      <td id="results-continuum-rmsnoiselevel-averageweather"></td>
+	      <td id="results-continuum-rmsnoiselevel-poorweather"></td>
+	    </tr>
+	    <tr><th>Brightness Temperature</th>
+	      <td id="results-continuum-brightnesstemperature-goodweather"></td>
+	      <td id="results-continuum-brightnesstemperature-averageweather"></td>
+	      <td id="results-continuum-brightnesstemperature-poorweather"></td>
+	    </tr>
+	  </tbody>
+	</table>
+	<div class="navigation-permanent">
+	  <div class="navigation-previous">
+	    <div class="results-interview-restart">
+	      &lt;&lt;&lt; Restart questionnaire</div>
+	    <div class="results-interview-reset-restart">
+	      &lt;&lt;&lt; Reset questionnaire</div>
+	    <div class="results-summary-panel">
+	      &lt;&lt;&lt; Sensitivity Summary</div>
+	  </div>
+	  <div class="navigation-next">
+	    <div class="results-array-panel">
+	      Array Information &gt;&gt;&gt;</div>
+	    <div class="results-spectrum-panel">
+	      Spectral Information &gt;&gt;&gt;</div>
+	    <div class="results-zoom-panel">
+	      Zoom Information &gt;&gt;&gt;</div>
+	  </div>
+	</div>
+      </div> <!-- #panel-results-continuum -->
+      <div class="interview-panel" id="panel-results-spectrum">
+	<h2>Spectral Information</h2>
+	<table class="results-parameter-table">
+	  <caption>Spectral Cube Parameters</caption>
+	  <tr><th>Weighting:</th>
+	    <td id="results-spectral-weighting"></td></tr>
+	  <tr><th>Weighting Factor:</th>
+	    <td><span id="results-spectral-weightingfactor"></span> x Natural</td></tr>
+	  <tr><th>Primary Beam FWHM:</th>
+	    <td id="results-spectral-primarybeam"></td></tr>
+	  <tr><th>Synthesised Beam FWHM:</th>
+	    <td id="results-spectral-synthesisedbeam"></td></tr>
+	  <tr><th>Central Frequency:</th>
+	    <td id="results-spectral-centralfrequency"></td></tr>
+	  <tr><th>Effective Bandwidth:</th>
+	    <td id="results-spectral-effectivebandwidth"></td></tr>
+	  <tr><th>Frequency Resolution:</th>
+	    <td id="results-spectral-frequencyresolution"></td></tr>
+	  <tr><th>Velocity Width:</th>
+	    <td id="results-spectral-velocitywidth"></td></tr>
+	  <tr><th>Velocity Resolution:</th>
+	    <td id="results-spectral-velocityresolution"></td></tr>
+	  <tr><th>Rest Frequency:</th>
+	    <td id="results-spectral-restfrequency"></td></tr>
+	</table>
+	<table class="results-parameter-table">
+	  <caption>Spectral Cube Plane Sensitivity</caption>
+	  <thead>
+	    <tr><td></td><th>Good Weather</th>
+	      <th>Average Weather</th>
+	      <th>Poor Weather</th></tr>
+	  </thead>
+	  <tbody>
+	    <tr><th>RMS noise level</th>
+	      <td id="results-spectral-rmsnoiselevel-goodweather"></td>
+	      <td id="results-spectral-rmsnoiselevel-averageweather"></td>
+	      <td id="results-spectral-rmsnoiselevel-poorweather"></td>
+	    </tr>
+	    <tr><th>Brightness Temperature</th>
+	      <td id="results-spectral-brightnesstemperature-goodweather"></td>
+	      <td id="results-spectral-brightnesstemperature-averageweather"></td>
+	      <td id="results-spectral-brightnesstemperature-poorweather"></td>
+	    </tr>
+	  </tbody>
+	</table>
+	<figure class="spectral-rms-small">
+	  <figcaption>The expected RMS noise varies across the spectral band
+	    as shown in this image. Click the image to expand it to full
+	    size. Red, cross-hatched frequency ranges in this plot would
+	    normally be flagged during the reduction process.</figcaption>
+	  <img id="results-spectral-rms-image" src="" />
+	</figure>
+	<div class="navigation-permanent">
+	  <div class="navigation-previous">
+	    <div class="results-interview-restart">
+	      &lt;&lt;&lt; Restart questionnaire</div>
+	    <div class="results-interview-reset-restart">
+	      &lt;&lt;&lt; Reset questionnaire</div>
+	    <div class="results-summary-panel">
+	      &lt;&lt;&lt; Sensitivity Summary</div>
+	  </div>
+	  <div class="navigation-next">
+	    <div class="results-array-panel">
+	      Array Information &gt;&gt;&gt;</div>
+	    <div class="results-continuum-panel">
+	      Continuum Information &gt;&gt;&gt;</div>
+	    <div class="results-zoom-panel">
+	      Zoom Information &gt;&gt;&gt;</div>
+	  </div>
+	</div>
+      </div> <!-- #panel-results-spectrum -->
+      <div class="interview-panel" id="panel-results-zoom">
+	<h2>Zoom Information</h2>
+	<table class="results-parameter-table">
+	  <caption>Zoom Band Cube Parameters</caption>
+	  <tr><th>Weighting:</th>
+	    <td id="results-zoom-weighting"></td></tr>
+	  <tr><th>Weighting Factor:</th>
+	    <td><span id="results-zoom-weightingfactor"></span> x Natural</td></tr>
+	  <tr><th>Primary Beam FWHM:</th>
+	    <td id="results-zoom-primarybeam"></td></tr>
+	  <tr><th>Synthesised Beam FWHM:</th>
+	    <td id="results-zoom-synthesisedbeam"></td></tr>
+	  <tr><th>Central Frequency:</th>
+	    <td id="results-zoom-centralfrequency"></td></tr>
+	  <tr><th>Effective Bandwidth:</th>
+	    <td id="results-zoom-effectivebandwidth"></td></tr>
+	  <tr><th>Frequency Resolution:</th>
+	    <td id="results-zoom-frequencyresolution"></td></tr>
+	  <tr><th>Cube planes:</th>
+	    <td id="results-zoom-cubeplanes"></td></tr>
+	  <tr><th>Velocity Width:</th>
+	    <td id="results-zoom-velocitywidth"></td></tr>
+	  <tr><th>Velocity Resolution:</th>
+	    <td id="results-zoom-velocityresolution"></td></tr>
+	  <tr><th>Rest Frequency:</th>
+	    <td id="results-zoom-restfrequency"></td></tr>
+	</table>
+	<table class="results-parameter-table">
+	  <caption>Zoom Band Cube Plane Sensitivity</caption>
+	  <thead>
+	    <tr><td></td><th>Good Weather</th>
+	      <th>Average Weather</th>
+	      <th>Poor Weather</th></tr>
+	  </thead>
+	  <tbody>
+	    <tr><th>RMS noise level</th>
+	      <td id="results-zoom-rmsnoiselevel-goodweather"></td>
+	      <td id="results-zoom-rmsnoiselevel-averageweather"></td>
+	      <td id="results-zoom-rmsnoiselevel-poorweather"></td>
+	    </tr>
+	    <tr><th>Brightness Temperature</th>
+	      <td id="results-zoom-brightnesstemperature-goodweather"></td>
+	      <td id="results-zoom-brightnesstemperature-averageweather"></td>
+	      <td id="results-zoom-brightnesstemperature-poorweather"></td>
+	    </tr>
+	  </tbody>
+	</table>
+	<div class="navigation-permanent">
+	  <div class="navigation-previous">
+	    <div class="results-interview-restart">
+	      &lt;&lt;&lt; Restart questionnaire</div>
+	    <div class="results-interview-reset-restart">
+	      &lt;&lt;&lt; Reset questionnaire</div>
+	    <div class="results-summary-panel">
+	      &lt;&lt;&lt; Sensitivity Summary</div>
+	  </div>
+	  <div class="navigation-next">
+	    <div class="results-array-panel">
+	      Array Information &gt;&gt;&gt;</div>
+	    <div class="results-continuum-panel">
+	      Continuum Information &gt;&gt;&gt;</div>
+	    <div class="results-spectrum-panel">
+	      Spectral Information &gt;&gt;&gt;</div>
+	  </div>
+	</div>
+      </div> <!-- #panel-results-zoom -->
+    </div> <!-- #interview -->
+
+
+    <div class="pagefooter">
+      <!--#include virtual="/includefiles/ca_footer.html" -->
+    </div>
+
+    <!-- The following code is for some modal windows for error alerts. -->
+    <div class="md-modal md-effect-1" id="modal-error-zoomfreq">
+      <div class="md-content">
+	<h3>Zoom Frequency Invalid</h3>
+	<div>
+	  <p>The zoom frequency you have entered is invalid, as CABB is
+	    not capable of observing at that frequency. Please enter a
+	    valid zoom frequency.</p>
+	  <button class="md-close">Gotcha!</button>
+	</div>
+      </div>
+    </div><!-- #modal-error-zoomfreq -->
+      
+    <div class="md-modal md-effect-1" id="modal-error-cabbfreq">
+      <div class="md-content">
+	<h3>CABB Central Frequency Invalid</h3>
+	<div>
+	  <p>The continuum central frequency you have entered is invalid, as 
+	    the CABB LOs are not able to tune to that frequency. Please enter a
+	    valid central frequency.</p>
+	  <button class="md-close">Gotcha!</button>
+	</div>
+      </div> 
+    </div> <!-- #modal-error-cabbfreq -->
+
+    <div class="md-modal md-effect-1" id="modal-error-nzooms">
+      <div class="md-content">
+	<h3>Invalid Number of zooms</h3>
+	<div>
+	  <p>CABB can provide consolidated zoom bands that use
+	    up to 16 individual zoom channels.</p>
+	  <p>Please restrict the
+	    number of zooms you use to between 1 and 16 inclusive.</p>
+	  <button class="md-close">Gotcha!</button>
+	</div>
+      </div> 
+    </div> <!-- #modal-error-nzooms -->
+
+    <div class="md-modal md-effect-1" id="modal-error-elevation">
+      <div class="md-content">
+	<h3>Invalid Elevation Limit</h3>
+	<div>
+	  <p>The ATCA can observe elevations between 12&deg; and
+	    90&deg;.</p>
+	  <p>Please restrict your lower elevation limit to
+	    between 12&deg; and 80&deg; inclusive.</p>
+	  <button class="md-close">Gotcha!</button>
+	</div>
+      </div> 
+    </div> <!-- #modal-error-elevation -->
+
+    <div class="md-modal md-effect-1" id="modal-error-declination">
+      <div class="md-content">
+	<h3>Invalid Source Declination</h3>
+	<div>
+	  <p>The ATCA can observe sources at declinations between -90&deg; and
+	    +48&deg;. Sources north of +48&deg; never rise above the telescope's
+	    lower elevation limit.</p>
+	  <p>Please restrict your source declination to
+	    between -90&deg; and +48&deg; inclusive.</p>
+	  <button class="md-close">Gotcha!</button>
+	</div>
+      </div> 
+    </div> <!-- #modal-error-declination -->
+
+    <div class="md-modal md-modal-image md-effect-1" id="modal-rms-image">
+      <div class="md-content md-content-image">
+	<h3>Spectral Band RMS</h3>
+	<div>
+	  <img id="modal-spectral-rms-image" src="" />
+	  <button class="md-close md-close-image">Close</button>
+	</div>
+      </div>
+    </div> <!-- #modal-rms-image -->
+
+  </body>
+</html>

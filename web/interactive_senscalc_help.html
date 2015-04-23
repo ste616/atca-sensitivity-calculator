@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" type="text/css"
+          href="http://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
+    <link href="http://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="interactive_senscalc.css">
+    <script src="/jslib/dojo/configure_dev.js"></script>
+    <script src="/jslib/dojo/1.10.4/dojo/dojo.js"></script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+      });
+    </script>
+    <script type="text/javascript" src="/jslib/mathjax/2.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>ATCA Sensitivity Calculator - Help</title>
+
+  </head>
+  <body class="claro">
+    <div class="helpSection invisible" id="weighting">
+      <h2>Help: Image Weighting</h2>
+      The sensitivity calculator uses Robust weighting only when computing the image
+      weighting factors, since Robust weighting is preferable over Natural and Uniform
+      schemes. When using Robust weighting, Robust=2 is essentially Natural weighting,
+      and Robust=-2 is essentially Uniform. The weighting factor shown in the image
+      parameters table describes exactly how the image RMS noise would compare to a
+      traditionally Natural-weighted image. These factors have been determined using
+      simulations over a range of frequencies and hour-angle ranges.
+    </div>
+
+    <div class="helpSection invisible" id="weatherConditions">
+      <h2>Help: Weather Conditions</h2>
+      The weather conditions used by the sensitivity calculator are derived from a
+      study into the variations in ground temperature, pressure and humidity observed at
+      the ATCA site over the past five years. The atmospheric opacity and temperature were derived
+      from these parameters, and were used to select the best, worst and typical
+      conditions used by the calculator for each season that can be selected. You
+      should expect that although you can have the "best" weather conditions for a
+      short time during your observations, you will probably never reach the sensitivity
+      shown in the "best" case. You should also always do better than the "worst"
+      case. The sensitivity shown for "typical" weather conditions should be very
+      close to what you would get for a normal observation in the selected season.
+    </div>
+
+    <div class="helpSection invisible" id="rmsNoise">
+      <h2>Help: RMS noise level</h2>
+      The RMS noise level computed by the sensitivity calculator is:
+      <div>$S_{\rm rms} = \cfrac{\sqrt{2} k {\rm T}_{\rm S} W}{10^{-26} A_{\rm ant} \epsilon \sqrt{N_{\rm ant}(N_{\rm ant} - 1) \Delta\nu \tau}}$,</div>
+      where<br />
+      <ul>
+	<li>$S_{\rm rms}$ is the RMS noise level, in units of mJy/beam,</li>
+	<li>$k$ is the Boltzmann constant, in units of ${\rm J}.{\rm K}^{-1}$,</li>
+	<li>${\rm T}_{\rm S}$ is the system temperature, in units of K,</li>
+	<li>$W$ is the image weighting factor (where for Natural weighting $W=1$),</li>
+	<li>$A_{\rm ant}$ is the surface area of a single antenna, in units of ${\rm m}^{2}$,</li>
+	<li>$\epsilon$ is the efficiency of the antenna (where for a perfect antenna $\epsilon=1$),</li>
+	<li>$N_{\rm ant}$ is the number of antenna in the array,</li>
+	<li>$\Delta\nu$ is the bandwidth, in units of MHz,</li>
+	<li>$\tau$ is the integration time, in units of seconds.</li>
+      </ul>
+      <br />
+      This provides the flux density of an unpolarised point source at the phase
+      centre that is equal to the RMS noise level.
+    </div>
+
+    <div class="helpSection invisible" id="brightnessTemperature">
+      <h2>Help: Brightness Sensitivity</h2>
+      The brightness sensitivity computed by the calculator is:
+      <div>$\sigma_{\rm BT} = \cfrac{10^{-26}S_{\rm rms}\lambda^{2}}{2k} \cfrac{(180/\pi)^{2}}{\pi \theta_{\rm min} \theta_{\rm maj}}$,</div>
+      where<br />
+      <ul>
+	<li>$\sigma_{\rm BT}$ is the brightness sensitivity, in units of K,</li>
+	<li>$S_{\rm rms}$ is the RMS noise level, in units of Jy/beam,</li>
+	<li>$\lambda$ is the wavelength, in units of m,</li>
+	<li>$k$ is the Boltzmann constant, in units of ${\rm J}.{\rm K}^{-1}$,</li>
+	<li>$\theta_{\rm min}$ is the semi-minor axis length of the synthesised beam, in units of degrees,</li>
+	<li>$\theta_{\rm maj}$ is the semi-major axis length of the synthesised beam, in units of degrees.</li>
+      </ul>
+    </div>
+
+    <div class="helpSection invisible" id="systemTemperature">
+      <h2>Help: System Temperature</h2>
+      The system temperature reported by the calculator has contributions from the
+      receiver temperature, atmospheric temperature and CMB temperature, and is scaled by the inverse
+      of the antenna efficiency.<br />
+      The atmospheric and CMB temperatures both depend on the elevation of the
+      antenna and the atmospheric zenith opacity:
+      <div>$f({\rm el}) = e^{-\tau_{z} / \sin({\rm el})}$,</div>
+      where<br />
+      <ul>
+	<li>el is the elevation of the antenna,</li>
+	<li>$\tau_{z}$ is the atmospheric opacity at zenith (or el = 90$^\circ$).</li>
+      </ul><br />
+      The CMB temperature contribution is computed by $T_{\rm CMB} = 2.7\times f({\rm el})$.<br />
+      The atmospheric temperature contribution is computed by
+      $T_{\rm atm} = T_{a}(\nu)(1 - f({\rm el}))$, where $T_{a}(\nu)$ is the brightness of radiation from
+      the atmosphere (which is strongly frequency dependant).<br />
+      The atmospheric radiation brightness and opacity are calculated using the model of Liebe (1985),
+      which is dependant on frequency, and the ground-level temperature, pressure and humidity.
+    </div>
+
+    <div class="helpSection invisible" id="antennaSEFD">
+      <h2>Help: Antenna and Array Sensitivity</h2>
+      The antenna and array sensitivities are actually Source Equivalent
+      Flux Densities (SEFD), which are computed by the calculator in the following way:
+      <div>${\rm SEFD} = \cfrac{2k{\rm T}_{\rm meas}}{10^{-26}A}$,</div>
+      where<br />
+      <ul>
+	<li>$k$ is the Boltzmann constant, in units of ${\rm J}.{\rm K}^{-1}$,</li>
+	<li>${\rm T}_{\rm meas}$ is the system temperature, accounting for the antenna efficiency and
+	  atmospheric temperature, in units of K,</li>
+	<li>$A$ is the surface area of the antenna (or array of antennas), in units of m$^{2}$.</li>
+      </ul><br />
+      The SEFD corresponds to the intensity of a source required to increase the noise in
+      the antenna (or array) by the equivalent of the system temperature.
+    </div>
+
+    <div class="helpSection invisible" id="velocityWidths">
+      <h2>Help: Velocity Width and Resolution</h2>
+      The range of velocity covered by an entire band is referred to by the calculator
+      as the velocity width, while the range of velocity covered by a single channel of
+      that band is referred to as the velocity resolution. Both values are computed in
+      exactly the same way:
+      <div>$\Delta v = \cfrac{c \nu_{0} \Delta\nu}{\nu_{l}(\nu_{l} + \Delta\nu)}$,</div>
+      where<br />
+      <ul>
+	<li>$\Delta v$ is the range of velocity, in units of km/s,</li>
+	<li>$c$ is the speed of light, in units of km/s,</li>
+	<li>$\nu_{0}$ is the rest frequency of the radiation, in units of MHz,</li>
+	<li>$\Delta\nu$ is the bandwidth or resolution used, in units of MHz,</li>
+	<li>$\nu_{l}$ is the lowest frequency observed in the band or channel, in units of MHz.</li>
+      </ul><br />
+      For bands where the exact frequency range is known and doesn't vary (for
+      example the continuum band or the specific zoom band), this equation is used as is. In
+      all other cases (for example, each individual continuum channel, or a general zoom band
+      somewhere in the continuum band), the velocity range is calculated by taking the
+      exact velocity range of a larger band and multiplying by the fractional bandwidth
+      represented by the smaller band. Such velocity ranges will be close enough for most
+      purposes.
+    </div>
+
+    <div class="helpSection invisible" id="primaryBeam">
+      <h2>Help: Primary Beam FWHM</h2>
+      The primary beam full-width at half-maximum is calculated as follows:
+      <div>$\theta_{\rm PB}(\nu) = \cfrac{c\nu}{D_{\rm ant}}$,</div>
+      where<br />
+      <ul>
+	<li>$\theta_{\rm PB}(\nu)$ is the primary beam FWHM at frequency $\nu$,</li>
+	<li>$c$ is the speed of light,</li>
+	<li>$D_{\rm ant}$ is the diameter of the antenna.</li>
+      </ul><br />
+      The calculator always computes the primary beam FWHM using the frequency at
+      the centre of the band of interest. For low frequencies and wide bandwidths, the
+      primary beam size will vary significantly over the band.
+    </div>
+
+    <div class="helpSection invisible" id="synthesisedBeam">
+      <h2>Help: Synthesised Beam FWHM</h2>
+      The synthesised beam full-width at half-maximum is calculated using the maximum
+      $u$ and $v$ projected baseline lengths that the array makes while observing between
+      hour angles $H_{\rm start}$ and $H_{\rm end}$.<br />
+      The natural baseline lengths are described in the Cartesian coordinate system (as
+      described in the <a href="http://www.narrabri.atnf.csiro.au/observing/users_guide/html/atug.html#Observatory-Coordinates">
+	ATCA Users Guide</a>. The baseline lengths in $X$, $Y$ and $Z$ should be expressed
+      in wavelengths by dividing by the wavelength at the centre of the band, making
+      $X_{\lambda}$, $Y_{\lambda}$ and $Z_{\lambda}$.<br />
+      The hour angle that corresponds to maximum $u$ for a particular baseline can be
+      calculated with:
+      <div>$H(u_{\rm max}) = \arctan\left(\cfrac{X_{\lambda}}{Y_{\lambda}}\right)$,</div>
+      and for maximum $v$:
+      <div>$H(v_{\rm max}) = \arctan\left(\cfrac{-Y_{\lambda}}{X_{\lambda}}\right)$.</div>
+      We then choose the closest hour angle to these that was actually observed (or exactly
+      these hour angles if possible) to determine $u_{\rm max}$ and $v_{\rm max}$:
+      <div>$u_{\rm max} = | X_{\lambda}\sin(H(u_{\rm max})) + Y_{\lambda}\cos(H(u_{\rm max})) |$,</div>
+      and
+      <div>$v_{\rm max} = |-X_{\lambda}\sin(\delta)\cos(H(v_{\rm max})) + Y_{\lambda}\sin(\delta)\sin(H(v_{\rm max})) + Z_{\lambda}\cos(\delta)|$,</div>
+      where $\delta$ is the declination of the source being observed.<br />
+      The synthesised beam size in the $l$ and $m$ directions are just the inverse of
+      $u_{\rm max}$ and $v_{\rm max}$ respectively, although they also depend on the
+      weighting scheme used for imaging, so that $w_{\rm beam} = 1$ for Natural weighting,
+      and smaller than that as the weighting tends to Uniform:
+      <div>$l_{res} = \cfrac{w_{\rm beam}}{u_{\rm max}}$,</div>
+      and
+      <div>$m_{res} = \cfrac{w_{\rm beam}}{v_{\rm max}}$.</div>
+      One of $l_{res}$ and $m_{res}$ will usually be smaller than the other, and that
+      is identified as the minor axis resolution $\theta_{\rm min}$, while the other
+      is the major axis resolution $\theta_{\rm maj}$.
+    </div>
+
+    <div class="helpSection invisible" id="changeLog">
+      <h2>Change Log</h2>
+      <h3>2015-April-22</h3>
+      Complete recode of the sensitivity calculator in Python, to clear out all the
+      assumptions made by the old calculator. The old calculator was producing
+      overly pessimistic results, as verified by B. Emonts and M. Mao. This new
+      calculator improves on the old one in several ways, including taking better
+      account of weather conditions observed at the ATCA during the CABB era.
+    </div>
+
+    <script src="interactive_senscalc_help.js"></script>
+  </body>
+</html>
