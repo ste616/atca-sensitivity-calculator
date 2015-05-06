@@ -1020,7 +1020,7 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 
 
 	     // The time that we expect the calculation to take, in seconds.
-	     var expectedTime = 32; // For namoi.
+	     var expectedTime = 14; // For namoi.
 	     var bufferTime = 2;
 
 	     // Make a couple of timing elements that will tick when the loading process
