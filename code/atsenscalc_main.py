@@ -540,21 +540,31 @@ def main(args):
     # for velocity range.
     # The usable frequency bandwidth over the continuum band.
     contVelBandwidth = highestFreq - lowestFreq
+    # Calculate the redshift given the rest frequency.
+    contRedshift = (argsInterpreted['restfreq'] / args.frequency) - 1
+    sens.addToOutput(output, 'continuum', 'computed_redshift', contRedshift, "Computed Redshift", "")
     # We calculate the velocity span corresponding to that amount of bandwidth with the
     # actual lower frequency.
+    velocitySpans = sens.bandwidthToVelocity(workArea['continuum']['centreFrequency'][args.edge],
+                                             contVelBandwidth, argsInterpreted['restfreq'])
     sens.addToOutput(output, 'continuum', 'spectral_bandwidth',
-                     sens.bandwidthToVelocity(workArea['continuum']['centreFrequency'][args.edge],
-                                              contVelBandwidth, argsInterpreted['restfreq']),
-                     "Spectral Bandwidth", "km/s")
+                     velocitySpans['lowz'], "Spectral Bandwidth", "km/s")
+    sens.addToOutput(output, 'continuum', 'highz_spectral_bandwidth',
+                     velocitySpans['highz'], "Spectral Bandwidth (cosmological)", "km/s")
     # The velocity width of a channel is dependant on its frequency, so we can't give
     # an exact figure for every channel here; we just divide the continuum range by the
     # number of channels here, excluding the edge channels.
     contRes = (output['continuum']['spectral_bandwidth'] / 
                float(len(workArea['continuum']['centreFrequency']) - 2 * args.edge))
+    contResCosm = (output['continuum']['highz_spectral_bandwidth'] /
+                   float(len(workArea['continuum']['centreFrequency']) - 2 * args.edge))
     # We now compensate for continuum band smoothing.
     chanRes = float("%.3f" % (contRes * float(args.smoothing)))
+    chanResCosm = float("%.3f" % (contResCosm * float(args.smoothing)))
     sens.addToOutput(output, 'continuum', 'spectral_channel_resolution', chanRes,
                      "Spectral Channel Resolution", "km/s")
+    sens.addToOutput(output, 'continuum', 'highz_spectral_channel_resolution', chanResCosm,
+                     "Spectral Channel Resolution (cosmological)", "km/s")
 
     # The velocity width of a "general" zoom band needs to be calculated in the same way
     # since the user may not want the edge channels there.
@@ -567,10 +577,15 @@ def main(args):
     # But we can't actually calculate a "general" velocity width that way since it is again
     # frequency dependant. So we just divide up the continuum velocity resolution.
     zoomRes = contRes / float(sens.nZoomChannels)
+    zoomResCosm = contResCosm / float(sens.nZoomChannels)
     # And compensate for zoom band smoothing.
     zoomChanRes = float("%.3f" % (zoomRes * float(args.zoom_smoothing)))
+    zoomChanResCosm = float("%.3f" % (zoomResCosm * float(args.zoom_smoothing)))
     sens.addToOutput(output, 'zoom', 'spectral_channel_resolution', zoomChanRes, "Spectral Channel Resolution",
                      "km/s")
+    sens.addToOutput(output, 'zoom', 'highz_spectral_channel_resolution', zoomChanResCosm,
+                     "Spectral Channel Resolution (cosmological)", "km/s")
+    
     # The number of channels in the zoom, excluding the edge flagged channels.
     nZoomVelChans = int(zoomVelBandwidth / workArea['resolutions']['zoom'])
     # But we output only the number of smoothed channels.
@@ -579,12 +594,20 @@ def main(args):
     # The zoom velocity width is then just the velocity resolution of each channel multiplied
     # by the number of non-edge channels.
     zoomSpecBandwidth = zoomRes * float(nZoomVelChans)
-    zsb = "%.3f" % zoomSpecBandwidth
+    zoomSpecBandwidthCosm = zoomResCosm * float(nZoomVelChans)
+    zsb = float("%.3f" % zoomSpecBandwidth)
+    zsbc = float("%.3f" % zoomSpecBandwidthCosm)
     sens.addToOutput(output, 'zoom', 'spectral_bandwidth', zsb, "Spectral Bandwidth", "km/s")
+    sens.addToOutput(output, 'zoom', 'highz_spectral_bandwidth', zsbc, "Spectral Bandwidth (cosmological)", "km/s")
+    # Add the computed redshift to the zoom information as well.
+    sens.addToOutput(output, 'zoom', 'computed_redshift', contRedshift, "Computed Redshift", "")
 
     if (specificZoomCalc):
         # We can actually calculate real velocity values for the specific zoom band, so we
         # do it basically the same as for the continuum band.
+        # The redshift.
+        szoomRedshift = (argsInterpreted['restfreq'] / args.zoomfreq) -1
+        sens.addToOutput(output, 'specific_zoom', 'computed_redshift', szoomRedshift, "Computed Redshift", "")
         # The frequency bandwidth of the specific zoom takes into account how many zoom
         # channels that the user will consolidate, and the number of channels flagged at the
         # edge.
@@ -594,10 +617,12 @@ def main(args):
                          "Effective Bandwidth", "MHz")
         # The velocity span corresponding to that amount of bandwidth is calculated with
         # respect to the lower frequency of the zoom.
+        zoomWidths = sens.bandwidthToVelocity(szoomLowestFreq, szoomVelBandwidth,
+                                              argsInterpreted['restfreq'])
         sens.addToOutput(output, 'specific_zoom', 'spectral_bandwidth',
-                         sens.bandwidthToVelocity(szoomLowestFreq, szoomVelBandwidth,
-                                                  argsInterpreted['restfreq']),
-                         "Spectral Bandwidth", "km/s")
+                         zoomWidths['lowz'], "Spectral Bandwidth", "km/s")
+        sens.addToOutput(output, 'specific_zoom', 'highz_spectral_bandwidth',
+                         zoomWidths['highz'], "Spectral Bandwidth (cosmological)", "km/s")
         # We calculate the number of channels across the consolidated zoom.
         nszoomChans = int(szoomVelBandwidth / workArea['resolutions']['zoom'])
         # But we output only the number of smoothed channels.
@@ -607,10 +632,14 @@ def main(args):
         # The velocity resolution is just the velocity span divided by the number of channels,
         # excluding those flagged at the edge.
         szoomRes = (output['specific_zoom']['spectral_bandwidth'] / float(nszoomChans))
+        szoomResCosm = (output['specific_zoom']['highz_spectral_bandwidth'] / float(nszoomChans))
         # We compensate for zoom smoothing.
         szoomChanRes = float("%.3f" % (szoomRes * float(args.zoom_smoothing)))
+        szoomChanResCosm = float("%.3f" % (szoomResCosm * float(args.zoom_smoothing)))
         sens.addToOutput(output, 'specific_zoom', 'spectral_channel_resolution', szoomChanRes,
                          "Spectral Channel Resolution", "km/s")
+        sens.addToOutput(output, 'specific_zoom', 'highz_spectral_channel_resolution', szoomChanResCosm,
+                         "Spectral Channel Resolution (cosmological)", "km/s")
     #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 

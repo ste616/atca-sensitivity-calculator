@@ -912,6 +912,10 @@ def addToOutput(output, item, name, value, description, units):
 def bandwidthToVelocity(lfreq, bw, restfreq):
     # Given a rest frequency in MHz, calculate the velocity span represented
     # by the specified bandwidth (MHz) starting at some low frequency (MHz).
+    # Calculate the low z width.
     vr = bw * restfreq * speedoflight * mToKm / (lfreq * (lfreq + bw))
+    # And the cosmological width.
+    vc = bw / (lfreq + bw / 2) * speedoflight * mToKm
     vro = float("%.3f" % vr)
-    return (vro)
+    vco = float("%.3f" % vc)
+    return ( { "lowz": vro, "highz": vco } )
