@@ -36,7 +36,7 @@ frequencyBands = {
     '16cm': { 'low': 1730, 'high': 2999,
               'tsys': "systemps/ca02_21cm_x_polarisation.avg" },
     '4cm': { 'low': 4928, 'high': 10928,
-             'tsys': "systemps/ca02_4cm_y_polarisation.avg" },
+             'tsys': "systemps/ca02_4cm_prodhorn.avg" },
     '15mm': { 'low': 16000, 'high': 25000,
               'tsys': "systemps/12mm_recvtemps.avg" },
     '7mm': { 'low': 30000, 'high': 50000,
