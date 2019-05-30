@@ -44,7 +44,7 @@ for i in xrange(0, len(bands)):
     teff = np.interp(tsys['centreFrequency'], eff['centreFrequency'],
                      eff['value'])
     # Calculate the SEFDs.
-    ae = np.pi * 22.0 * 22.0 * teff
+    ae = np.pi * 11.0 * 11.0 * teff
     sefd = (2.0 * 1.38064852e-23 / 1e-26) * (tsys['value'] / ae)
     bsefd[b] = { 'centreFrequency': tsys['centreFrequency'],
                  'value': sefd }
