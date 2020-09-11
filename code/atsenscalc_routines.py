@@ -172,7 +172,7 @@ def makeTemplate(centreFreq, bandwidth, channelWidth):
         cFreq += channelWidth
         chanNum += 1
     nx = np.array(x)
-    for i in xrange(0, len(sideBands['LSB'])):
+    for i in range(0, len(sideBands['LSB'])):
         if ((centreFreq >= sideBands['LSB'][i][0]) and
             (centreFreq <= sideBands['LSB'][i][1])):
             # This band is LSB, so we flip the channel numbers.
@@ -187,7 +187,7 @@ def makeTemplate(centreFreq, bandwidth, channelWidth):
 def averageTemplate(template):
     # Return the average unflagged value of a template.
     varr = np.array([])
-    for i in xrange(0, len(template['value'])):
+    for i in range(0, len(template['value'])):
         if (template['flags'][i] == False):
             varr = np.append(varr, template['value'][i])
     return np.mean(varr)
@@ -314,7 +314,7 @@ def readTsys(filename, lf, hf):
         v = [(10 ** row[1]) for row in dds]
         n = []
         f = []
-        for i in xrange(0, len(v)):
+        for i in range(0, len(v)):
             n.append(1)
             f.append(False)
         return { 'centreFrequency': c, 'value': v, 'count': np.array(n),
@@ -335,14 +335,14 @@ def overlaps(a, b):
 
 def templateAverage(t):
     # Divide the values by the counts.
-    for i in xrange(0, len(t['centreFrequency'])):
+    for i in range(0, len(t['centreFrequency'])):
         if (t['count'][i] > 0):
             t['value'][i] /= float(t['count'][i])
             if (isinstance(t['flags'][i], list) == True):
                 # Multiple input flags, we choose the most common.
                 ft = 0
                 ff = 0
-                for j in xrange(0, len(t['flags'][i])):
+                for j in range(0, len(t['flags'][i])):
                     if (t['flags'][i][j]):
                         ft += 1
                     else:
@@ -476,7 +476,7 @@ def templateEfficiency():
            0.2336,   0.2322,   0.14,     0.14 ]
     f = []
     n = []
-    for i in xrange(0, len(c)):
+    for i in range(0, len(c)):
         n.append(1)
         f.append(False)
     return { 'centreFrequency': np.array(c), 'value': np.array(v),
@@ -489,6 +489,7 @@ def fillAtmosphereTemplate(templateOpacity, templateTemperature, t, p, h):
     atmos = refract.calcOpacity(templateOpacity['centreFrequency'] * 1e6, math.radians(90.0), t, p, h)
     templateOpacity['value'] = np.array(atmos['tau'])
     templateTemperature['value'] = np.array(atmos['Tb'])
+    return atmos['pwv']
 
 def plotTemplate(t, e, outname):
     plt.clf()
@@ -524,7 +525,7 @@ def plotSpectrum(template, conditions, outname):
                ncol=len(c), mode="expand", borderaxespad=0.)
 
     # Highlight the regions that are flagged in the template.
-    for i in xrange(0, len(template[conditions[0]]['flags'])):
+    for i in range(0, len(template[conditions[0]]['flags'])):
         if (template[conditions[0]]['flags'][i] == True):
             x1 = template[conditions[0]]['centreFrequency'][i] - template[c]['channelWidth'] / 2.0
             x2 = template[conditions[0]]['centreFrequency'][i] + template[c]['channelWidth'] / 2.0
@@ -538,8 +539,8 @@ def flagTemplate(t, flagType, corrMode, edgeChan):
         flagSrc = channelFlagging[flagType]
         if (corrMode in flagSrc):
             flagSrc = flagSrc[corrMode]
-            for c in xrange(0, len(flagSrc)):
-                for i in xrange(0, len(t['flags'])):
+            for c in range(0, len(flagSrc)):
+                for i in range(0, len(t['flags'])):
                     if (t['channelNumber'][i] == flagSrc[c]):
                         t['flags'][i] = True
                         break
@@ -547,8 +548,8 @@ def flagTemplate(t, flagType, corrMode, edgeChan):
         # This is frequency based flagging.
         oldi = 0
         flagSrc = frequencyFlagging[flagType]
-        for r in xrange(0, len(flagSrc)):
-            for i in xrange(oldi, len(t['flags'])):
+        for r in range(0, len(flagSrc)):
+            for i in range(oldi, len(t['flags'])):
                 f1 = t['centreFrequency'][i] - t['channelWidth'] / 2.0
                 f2 = t['centreFrequency'][i] + t['channelWidth'] / 2.0
                 if (f1 > flagSrc[r][1]):
@@ -556,13 +557,13 @@ def flagTemplate(t, flagType, corrMode, edgeChan):
                 t['flaggedBandwidth'][i] += frequencyOverlap(f1, f2, flagSrc[r][0], flagSrc[r][1])
                 oldi = i
         # Check for which channels are above the percentage flagged cut.
-        for i in xrange(0, len(t['flags'])):
+        for i in range(0, len(t['flags'])):
             p = t['flaggedBandwidth'][i] / t['channelWidth']
             if (p > 0.5):
                 t['flags'][i] = True
     elif (flagType == "edge"):
         # Flag edge channels.
-        for i in xrange(0, len(t['channelNumber'])):
+        for i in range(0, len(t['channelNumber'])):
             cn = i + 1
             rcn = len(t['channelNumber']) - i
             if ((cn <= edgeChan) or
@@ -578,7 +579,7 @@ def calculateSensitivity(rmsTemplate, nAnts):
     rmsZoomTotal = 0.0
     rmsN = 0
     rmsZoomN = 0
-    for i in xrange(0, len(rmsTemplate['value'])):
+    for i in range(0, len(rmsTemplate['value'])):
         # We count flagged continuum channels in the zoom RMS calculation.
         rmsZoomTotal += rmsTemplate['value'][i]
         rmsZoomN += 1
@@ -632,7 +633,7 @@ def calculateRms(tsys, efficiency, opacity, temperature, minHa, maxHa, perHa, nA
 
     Texcess = []
     systemTemperature = []
-    for j in xrange(0, int(nIntegrations + 1)):
+    for j in range(0, int(nIntegrations + 1)):
         # The hour angle at this integration.
         jHa = minHa + float(j) / perHa
         
@@ -648,7 +649,7 @@ def calculateRms(tsys, efficiency, opacity, temperature, minHa, maxHa, perHa, nA
         atFactor = temperature['value'] * ivFactor
         Texcess.append(atFactor + cbFactor)
 
-    for i in xrange(0, len(tsys['centreFrequency'])):
+    for i in range(0, len(tsys['centreFrequency'])):
         # Check that the frequencies are the same in both templates.
         if (tsys['centreFrequency'][i] == efficiency['centreFrequency'][i]):
             # All's good.
@@ -763,9 +764,9 @@ def weightingFactor(weighting, array, ant6):
                 'R-2': { 'avg': 1.988, 'min': 1.755, 'max': 2.288, 'beam': 0.59 } } ] } ]
 
     # Search through the array.
-    for f in xrange(0, len(factors)):
+    for f in range(0, len(factors)):
         arrayFound = False
-        for i in xrange(0, len(factors[f]['array'])):
+        for i in range(0, len(factors[f]['array'])):
             if (array == factors[f]['array'][i]):
                 arrayFound = True
                 break
@@ -848,14 +849,14 @@ def maximumBaseline(array):
           'stations': [ 'W104', 'W109', 'W104', 'N5' ] } ]
 
     # Search through the array.
-    for s in xrange(0, len(endStations)):
+    for s in range(0, len(endStations)):
         if (array in endStations[s]['array']):
             # Calculate the maximum dX, dY, dZ.
             mdX = 0
             mdY = 0
             mdZ = 0
-            for i in xrange(0, len(endStations[s]['stations']) - 1):
-                for j in xrange(i + 1, len(endStations[s]['stations'])):
+            for i in range(0, len(endStations[s]['stations']) - 1):
+                for j in range(i + 1, len(endStations[s]['stations'])):
                     dYp = abs(stationLocations[endStations[s]['stations'][i]][0] -
                               stationLocations[endStations[s]['stations'][j]][0])
                     dXp = abs(stationLocations[endStations[s]['stations'][i]][1] -
@@ -873,7 +874,7 @@ def maximumBaseline(array):
             mdX6 = 0
             mdY6 = 0
             mdZ6 = 0
-            for i in xrange(0, len(endStations[s]['stations'])):
+            for i in range(0, len(endStations[s]['stations'])):
                 dYp = abs(stationLocations[endStations[s]['stations'][i]][0] -
                           stationLocations['W392'][0])
                 dXp = abs(stationLocations[endStations[s]['stations'][i]][1] -

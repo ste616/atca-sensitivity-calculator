@@ -22,6 +22,7 @@
 # If not, see <http://www.gnu.org/licenses/>.
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import numpy as np
 import atsenscalc_routines as sens
 
@@ -35,7 +36,8 @@ freqs = [ [ 1100, 3500 ], [ 3501, 12000 ], [ 13000, 27000 ], [ 28000, 51000 ],
           [ 80000, 110000 ] ]
 btsys = {}
 bsefd = {}
-for i in xrange(0, len(bands)):
+ctsys = {}
+for i in range(0, len(bands)):
     b = bands[i]
     tsys = sens.readTsys(sens.frequencyBands[b]['tsys'],
                          freqs[i][0], freqs[i][1])
@@ -45,6 +47,8 @@ for i in xrange(0, len(bands)):
                      eff['value'])
     # Calculate the SEFDs.
     ae = np.pi * 11.0 * 11.0 * teff
+    ctsys[b] = { 'centreFrequency': tsys['centreFrequency'],
+                 'value': tsys['value'] / teff }
     sefd = (2.0 * 1.38064852e-23 / 1e-26) * (tsys['value'] / ae)
     bsefd[b] = { 'centreFrequency': tsys['centreFrequency'],
                  'value': sefd }
@@ -53,7 +57,7 @@ def plotter(ax, obj, band):
     f = np.array(obj[band]['centreFrequency']) / 1000.
     ax.plot(f, obj[band]['value'], '-', color="black")
     ax.set_xlim(f[0], f[-1])
-    ax.set_yscale('log')
+    #ax.set_yscale('log')
 
 def splotter(ax, obj, band, no6=False):
     f = np.array(obj[band]['centreFrequency']) / 1000.
@@ -93,6 +97,33 @@ ax6.set_xlabel('Frequency [GHz]')
 fig.text(0.04, 0.5, "System Temperature [K]", va='center', rotation='vertical')
 plt.savefig("tsys.png")
 
+# A Tsys plot compensating for efficiency.
+plt.clf()
+fig, (ax1, ax2, ax3, ax4, ax5, ax6) = plt.subplots(6, 1)
+fig.subplots_adjust(hspace=0.5)
+# Top plot is 3mm.
+plotter(ax1, ctsys, "3mm")
+# 7mm.
+plotter(ax2, ctsys, "7mm")
+# 15mm.
+plotter(ax3, ctsys, "15mm")
+# 4cm.
+plotter(ax4, ctsys, "4cm")
+# 16cm.
+plotter(ax5, ctsys, "16cm")
+# All.
+plotter(ax6, ctsys, "3mm")
+plotter(ax6, ctsys, "7mm")
+plotter(ax6, ctsys, "15mm")
+plotter(ax6, ctsys, "4cm")
+plotter(ax6, ctsys, "16cm")
+ax6.set_xlim((ctsys['16cm']['centreFrequency'][0] / 1000.),
+             (ctsys['3mm']['centreFrequency'][-1] / 1000.))
+ax6.set_xlabel('Frequency [GHz]')
+fig.text(0.04, 0.5, "System Temperature / Eff. [K]", va='center', rotation='vertical')
+plt.savefig("tsys_div_eff.png")
+
+
 plt.clf()
 fig, (ax1, ax2, ax3, ax4, ax5, ax6) = plt.subplots(6, 1)
 fig.subplots_adjust(hspace=0.5)
@@ -119,16 +150,19 @@ fig.text(0.04, 0.5, "SEFD [Jy]", va='center', rotation='vertical')
 plt.savefig("sefd.png")
 
 # Output the median Tsys and SEFD for each band.
-print "Band  Tsys    SEFD1   SEFD2   SEFD3   SEFD4   SEFD5   SEFD6"
+print ("Band  Tsys    Tsys/e  SEFD1   SEFD2   SEFD3   SEFD4   SEFD5   SEFD6")
 for b in bands:
     mdtsys = np.median(btsys[b]['value'])
     mdsefd = np.median(bsefd[b]['value'])
+    mdetsys = np.max(ctsys[b]['value'])
     if b != "3mm":
-        print "%4s  %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f" % (b, mdtsys, mdsefd, (mdsefd / 2.),
-                                                                         (mdsefd / 3.), (mdsefd / 4.),
-                                                                         (mdsefd / 5.), (mdsefd / 6.))
+        print ("%4s  %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f" % (b, mdtsys, mdetsys, mdsefd,
+                                                                                 (mdsefd / 2.),
+                                                                                 (mdsefd / 3.), (mdsefd / 4.),
+                                                                                 (mdsefd / 5.), (mdsefd / 6.)))
     else:
-        print "%4s  %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f NA" % (b, mdtsys, mdsefd, (mdsefd / 2.),
-                                                                     (mdsefd / 3.), (mdsefd / 4.),
-                                                                     (mdsefd / 5.))
+        print ("%4s  %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f %-7.1f NA" % (b, mdtsys, mdetsys, mdsefd,
+                                                                             (mdsefd / 2.),
+                                                                             (mdsefd / 3.), (mdsefd / 4.),
+                                                                             (mdsefd / 5.)))
         

@@ -236,7 +236,7 @@ def refract(t, pdry, pvap, z, n, nu, T0, el):
     Lvap = 0.0
 
     snell = math.sin(el)
-    for i in xrange(n, 0, -1):
+    for i in range(n, 0, -1):
         if (i == 1):
             dz = 0.5 * (z[1] - z[0])
         elif (i == n):
@@ -296,7 +296,8 @@ def calcOpacity(freq, el, t0, p0, h0):
     Tb = []
     tau = []
     ofreq = []
-    for i in xrange(0, (N + 1)):
+    pwv = []
+    for i in range(0, (N + 1)):
         zd = float(i) * zmax / float(N)
         z.append(zd)
         T.append(t0 / (1 + d / t0 * zd))
@@ -306,11 +307,12 @@ def calcOpacity(freq, el, t0, p0, h0):
         Pdry.append(P - Pvap[i])
 
     # Determine the transmissivity and sky brightness.
-    for i in xrange(0, len(freq)):
+    for i in range(0, len(freq)):
         resref = refract(T, Pdry, Pvap, z, N, freq[i], 2.7, el)
         fac.append(math.exp(-1.0 * resref['tau']))
         Tb.append(resref['Tb'])
         tau.append(resref['tau'])
         ofreq.append(freq[i])
+        pwv.append((resref['Lvap'] * 1e6) / (103.0 * 461.0 * (16.48 + 3.776e5 / (70.03 + 0.726 * t0))))
 
-    return { 'fac': fac, 'Tb': Tb, 'tau': tau, 'freq': ofreq }
+    return { 'fac': fac, 'Tb': Tb, 'tau': tau, 'freq': ofreq, 'pwv': pwv }

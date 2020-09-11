@@ -137,7 +137,7 @@ def thingToString(t):
         return (t)
     elif (type(t) is list):
         narr = []
-        for i in xrange(0, len(t)):
+        for i in range(0, len(t)):
             narr.append(thingToString(t[i]))
         return (', '.join(narr))
     elif (type(t) is int):
@@ -149,7 +149,7 @@ def humanOutputDict(d, description, units, l):
     for p in d:
         if (p != "description" and p != "units"):
             if (type(d[p]) is dict):
-                print "%s%s:" % ((" " * l), p)
+                print("%s%s:" % ((" " * l), p))
                 humanOutputDict(d[p], description, units, (l + 1))
             else:
                 od = p
@@ -159,7 +159,7 @@ def humanOutputDict(d, description, units, l):
                 if (p in units):
                     ou = units[p]
                 ov = thingToString(d[p])
-                print "%s %s = %s %s" % ((" " * l), od, ov, ou)
+                print("%s %s = %s %s" % ((" " * l), od, ov, ou))
 
 def main(args):
     ####################################################################################################
@@ -169,9 +169,9 @@ def main(args):
     except sens.CalcError:
         _, c, _ = sys.exc_info()
         if (args.human_readable):
-            print "FATAL: ", c.value
+            print("FATAL: ", c.value)
         else:
-            print '{ "error": "%s" }' % c.value
+            print('{ "error": "%s" }' % c.value)
         sys.exit(-1)
 
     # The number of antenna and baselines.
@@ -210,9 +210,9 @@ def main(args):
     except sens.CalcError:
         _, c, _ = sys.exc_info()
         if (args.human_readable):
-            print "FATAL: ", c.value
+            print ("FATAL: ", c.value)
         else:
-            print '{ "error": "%s" }' % c.value
+            print ('{ "error": "%s" }' % c.value)
         sys.exit(-1)
 
     # Get the lengths of the baselines and determine the maximum baseline length.
@@ -221,9 +221,9 @@ def main(args):
     except sens.CalcError:
         _, c, _ = sys.exc_info()
         if (args.human_readable):
-            print "FATAL: ", c.value
+            print ("FATAL: ", c.value)
         else:
-            print '{ "error": "%s" }' % c.value
+            print ('{ "error": "%s" }' % c.value)
         sys.exit(-1)
     maxBaselineLength = baselineLengths['track']
     if (args.ca06):
@@ -231,7 +231,7 @@ def main(args):
 
     # All parameters are valid.
     if (not args.quiet):
-        print "MESSAGE: Starting calculator."
+        print ("MESSAGE: Starting calculator.")
     workArea = {}
     #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -308,7 +308,7 @@ def main(args):
     ####################################################################################################
     # Make the continuum spectrum templates.
     if (not args.quiet):
-        print "MESSAGE: Generating template spectra..."
+        print ("MESSAGE: Generating template spectra...")
     workArea['continuum'] = sens.makeTemplate(args.frequency, sens.continuumBandwidth,
                                               workArea['resolutions']['continuum'])
     workArea['alternate'] = sens.makeTemplate((args.frequency - workArea['resolutions']['continuum'] / 2),
@@ -325,9 +325,9 @@ def main(args):
     except sens.CalcError:
         _, c, _ = sys.exc_info()
         if (args.human_readable):
-            print "FATAL: ", c.value
+            print ("FATAL: ", c.value)
         else:
-            print '{ "error": "%s" }' % c.value
+            print ('{ "error": "%s" }' % c.value)
         sys.exit(-1)
     # Use the raw Tsys to fill in the required templates.
     sens.templateFill(cacheTsys, workArea['continuum'])
@@ -338,12 +338,12 @@ def main(args):
         # specific zoom frequency.
         closestCentreFreq = 0.0
         closestCentreOffs = 3000.0
-        for i in xrange(0, len(workArea['continuum']['centreFrequency'])):
+        for i in range(0, len(workArea['continuum']['centreFrequency'])):
             offs = abs(workArea['continuum']['centreFrequency'][i] - args.zoomfreq)
             if (offs < closestCentreOffs):
                 closestCentreFreq = workArea['continuum']['centreFrequency'][i]
                 closestCentreOffs = offs
-        for i in xrange(0, len(workArea['alternate']['centreFrequency'])):
+        for i in range(0, len(workArea['alternate']['centreFrequency'])):
             offs = abs(workArea['alternate']['centreFrequency'][i] - args.zoomfreq)
             if (offs < closestCentreOffs):
                 closestCentreFreq = workArea['alternate']['centreFrequency'][i]
@@ -413,7 +413,7 @@ def main(args):
     ####################################################################################################
     # Do template flagging.
     if (not args.quiet):
-        print "MESSAGE: Flagging..."
+        print ("MESSAGE: Flagging...")
     sens.flagTemplate(workArea['continuum'], 'continuum', args.corrconfig, 0)
     sens.flagTemplate(workArea['continuum'], 'edge', args.corrconfig, args.edge)
     if (specificZoomCalc):
@@ -435,9 +435,9 @@ def main(args):
     # Check that we will end up with at least 2 channels, otherwise we die.
     if ((sens.continuumBandwidth / contSmoothRes) < 2):
         if (args.human_readable):
-            print "FATAL: Smoothing factor too large."
+            print ("FATAL: Smoothing factor too large.")
         else:
-            print '{ "error": "Smoothing factor too large." }'
+            print ('{ "error": "Smoothing factor too large." }')
         sys.exit(-1)
     # Make the smoothed templates and fill them from the unsmoothed templates.
     workArea['continuum-smooth'] = sens.makeTemplate(args.frequency, sens.continuumBandwidth, contSmoothRes)
@@ -463,9 +463,9 @@ def main(args):
     # We don't want to smooth too much in the zooms either, so we check for that now.
     if ((workArea['resolutions']['continuum'] / zoomSmoothRes) < 2):
         if (args.human_readable):
-            print "FATAL: Zoom smoothing factor too large."
+            print ("FATAL: Zoom smoothing factor too large.")
         else:
-            print '{ "error": "Zoom smoothing factor too large." }'
+            print ('{ "error": "Zoom smoothing factor too large." }')
         sys.exit(-1)
 
     if (specificZoomCalc):
@@ -508,9 +508,9 @@ def main(args):
                                                       hourAngle_max, imageWeights['beam'])
     except ZeroDivisionError:
         if (args.human_readable):
-            print "FATAL: Cannot observe a declination 0 source with an EW array."
+            print ("FATAL: Cannot observe a declination 0 source with an EW array.")
         else:
-            print '{ "error": "Cannot observe a declination 0 source with an EW array." }'
+            print ('{ "error": "Cannot observe a declination 0 source with an EW array." }')
         sys.exit(-1)
     sens.addToOutput(output, 'source_imaging', 'synthesised_beam_size', synthBeamContinuum,
                 "Synthesised Beam Size (FWHM)", "arcsec")
@@ -647,7 +647,7 @@ def main(args):
     ####################################################################################################
     # Get the atmospheric parameters for the zenith and store that in a template.
     if (not args.quiet):
-        print "MESSAGE: Calculating weather effects..."
+        print ("MESSAGE: Calculating weather effects...")
 
     # The weather conditions that we will use for computing the atmosphere later.
     weatherConditions = {
@@ -738,10 +738,11 @@ def main(args):
                                                       workArea['resolutions']['continuum'])
         workArea['temperature'][condition] = sens.makeTemplate(args.frequency, sens.continuumBandwidth,
                                                           workArea['resolutions']['continuum'])
-        sens.fillAtmosphereTemplate(tempOpacity, tempTemperature, 
-                               (weatherConditions[args.season][condition]['temperature'] + 273.15),
-                               (weatherConditions[args.season][condition]['pressure'] * 100.0),
-                               (weatherConditions[args.season][condition]['humidity'] / 100.0))
+        pwv = sens.fillAtmosphereTemplate(tempOpacity, tempTemperature, 
+                                          (weatherConditions[args.season][condition]['temperature'] + 273.15),
+                                          (weatherConditions[args.season][condition]['pressure'] * 100.0),
+                                          (weatherConditions[args.season][condition]['humidity'] / 100.0))
+        #print("found pwv = %.3f m" % pwv[0])
         sens.templateFill(tempOpacity, workArea['opacity'][condition])
         sens.templateFill(tempTemperature, workArea['temperature'][condition])
         if (specificZoomCalc):
@@ -760,7 +761,7 @@ def main(args):
     ####################################################################################################
     # Compute the sensitivites with all the information we just collected.
     if (not args.quiet):
-        print "MESSAGE: Calculating sensitivities..."
+        print ("MESSAGE: Calculating sensitivities...")
     workArea['continuum-rms'] = {}
     workArea['continuum-smooth-rms'] = {}
     workArea['specificZoom-rms'] = {}
@@ -795,9 +796,9 @@ def main(args):
             # Check whether we have any unflagged continuum channels.
             if (sensResSmooth['bandwidth']['unflagged'] < 1.0):
                 if (args.human_readable):
-                    print "FATAL: No continuum bandwidth remains unflagged."
+                    print ("FATAL: No continuum bandwidth remains unflagged.")
                 else:
-                    print '{ "error": "No continuum bandwidth remains unflagged." }'
+                    print ('{ "error": "No continuum bandwidth remains unflagged." }')
                 sys.exit(-1)
 
             # We get the "general" zoom sensitivity from the unsmoothed continuum data, since smoothing
@@ -1010,6 +1011,6 @@ def main(args):
         humanOutputDict(output, output['description'], output['units'], 0)
     else:
         # Output the JSON.
-        print json.dumps(output)
+        print (json.dumps(output))
     #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     # SENSITIVITY CALCULATOR ENDS
