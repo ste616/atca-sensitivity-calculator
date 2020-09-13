@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 import atsenscalc_routines as sens
+import refract as refract
 
 # This module takes the system temperatures we know about and makes
 # nice plots of them, including SEFDs.
@@ -34,6 +35,10 @@ eff = sens.templateEfficiency()
 bands = [ "16cm", "4cm", "15mm", "7mm", "3mm" ]
 freqs = [ [ 1100, 3500 ], [ 3501, 12000 ], [ 13000, 27000 ], [ 28000, 51000 ],
           [ 80000, 110000 ] ]
+midfreqs = [ [ 2100 ], [ 5000, 7000, 9000, 11000 ],
+             [ 14000, 16000, 18000, 20000, 22000, 24000, 26000 ],
+             [ 30000, 32000, 34000, 36000, 38000, 40000, 42000, 44000, 46000,
+               480000, 50000 ] ]
 btsys = {}
 bsefd = {}
 ctsys = {}
@@ -52,6 +57,18 @@ for i in range(0, len(bands)):
     sefd = (2.0 * 1.38064852e-23 / 1e-26) * (tsys['value'] / ae)
     bsefd[b] = { 'centreFrequency': tsys['centreFrequency'],
                  'value': sefd }
+    # Do it with the templating.
+    for j in range(0, len(midfreqs[i])):
+      cont = sens.makeTemplate(midfreqs[i][j], 2000, 50)
+      lowfreq = (cont['centreFrequency'][0] - 25.0)
+      highfreq = (cont['centreFrequency'][-1] + 25.0)
+      sens.templateFill(tsys, cont)
+      eff = sens.makeTemplate(midfreqs[i][j], 2000, 50)
+      effmt = sens.templateEfficiency()
+      sens.templateFill(effmt, eff)
+      opac = sens.makeTemplate(midfreqs[i][j], 2000, 50)
+      atemp = sens.makeTemplate(midfreqs[i][j], 2000, 50)
+      pwv = sens.fillAtmosphereTemplate(opac, atemp, (273.15 + 21.8), 98700.0, 0.7)
 
 def plotter(ax, obj, band):
     f = np.array(obj[band]['centreFrequency']) / 1000.
