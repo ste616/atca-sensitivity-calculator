@@ -488,6 +488,7 @@ def fillAtmosphereTemplate(templateOpacity, templateTemperature, t, p, h):
     # in the template.
     atmos = refract.calcOpacity(templateOpacity['centreFrequency'] * 1e6, math.radians(90.0), t, p, h)
     templateOpacity['value'] = np.array(atmos['tau'])
+    templateOpacity['fac'] = np.array(atmos['fac'])
     templateTemperature['value'] = np.array(atmos['Tb'])
     return atmos['pwv']
 
