@@ -880,6 +880,7 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 		 [ 'parameters', 'atmospheric_conditions', 'worst', 'humidity' ]
 	     };
 	     var gotResults = function(data) {
+		 console.log(data);
 		 // Close the loading dialog.
 		 query('#modal-loading').removeClass('md-show');
 		 // Hide any messages that have popped up.
