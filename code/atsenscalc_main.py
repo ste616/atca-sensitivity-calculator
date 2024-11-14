@@ -23,7 +23,7 @@
 
 import math
 import sys
-import simplejson as json
+import json
 import numpy as np
 import atsenscalc_routines as sens
 

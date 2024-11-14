@@ -29,11 +29,12 @@ import os
 import socket
 if (socket.gethostname() == 'namoi'):
     # Need to setup the matplotlib area.
-    os.environ['HOME'] = '/var/www/vhosts/www.narrabri.atnf.csiro.au/cgi-bin/obstools'
+    os.environ['HOME'] = '/var/www/vhosts/www.narrabri.atnf.csiro.au/writeable/cgi-bin/obstools'
 import matplotlib
 # This line is needed since we run matplotlib without an X-server.
 matplotlib.use('Agg')
 import atsenscalc_main as sens
+import sys
 
 # Set up a structure that can be used like the args in the argparse library.
 class Struct:
@@ -250,9 +251,12 @@ if __name__ == "__main__":
 
     fargs['human_readable'] = False
 
+    # The location to write the plots.
+    fargs['plot_location'] = "/var/www/vhosts/www.narrabri.atnf.csiro.au/writeable/cgi-bin/obstools"
+    
     # Start the JSON output.
-    print "Content-type: text/json"
-    print
+    sys.stdout.write("Content-type: text/json\r\n\r\n")
+    sys.stdout.flush()
 
     # Make the args object.
     args = Struct(**fargs)
