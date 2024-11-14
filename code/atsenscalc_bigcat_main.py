@@ -332,16 +332,8 @@ def main(args):
     sens.templateFill(cacheTsys, workArea['continuum'])
     # Make the specific zoom template here too.
     if (specificZoomCalc):
-        # Determine which channel is closest in centre frequency to the nominated
-        # specific zoom frequency.
-        closestCentreFreq = 0.0
-        closestCentreOffs = 3000.0
-        for i in range(0, len(workArea['continuum']['centreFrequency'])):
-            offs = abs(workArea['continuum']['centreFrequency'][i] - args.zoomfreq)
-            if (offs < closestCentreOffs):
-                closestCentreFreq = workArea['continuum']['centreFrequency'][i]
-                closestCentreOffs = offs
         # Compute how the bandwidth is distributed around the centre frequency.
+        closestCentreFreq = args.zoomfreq
         bandwidthAbove = args.zoom_bandwidth / 2.0
         bandwidthBelow = bandwidthAbove
         szBandwidths = [ bandwidthBelow, bandwidthAbove ]
@@ -364,11 +356,9 @@ def main(args):
     if (specificZoomCalc):
         sens.addToOutput(output, 'parameters', 'zoom_frequency', closestCentreFreq, "Specific Zoom Frequency", "MHz")
         # Get the lowest and highest frequencies.
-        szoomLowestFreq = (workArea['specificZoom']['centreFrequency'][0] -
-                           (workArea['resolutions']['zoom'] / 2))
-        szoomHighestFreq = (workArea['specificZoom']['centreFrequency'][-1] +
-                            (workArea['resolutions']['zoom'] / 2))
-        sens.addToOutput(output, 'specific_zoom', 'frequency_range', [ szoomLowestFreq, szoomHighestFreq ],
+        szoomLowestFreq = workArea['specificZoom']['centreFrequency'][0]
+        szoomHighestFreq = workArea['specificZoom']['centreFrequency'][-1]
+        sens.addToOutput(output, 'specific_zoom', 'zoom_frequency_range', [ szoomLowestFreq, szoomHighestFreq ],
                          "Specific Zoom Frequency Range", "MHz")
         # The number of zooms used.
         sens.addToOutput(output, 'specific_zoom', 'bw_zooms', args.zoom_bandwidth,
