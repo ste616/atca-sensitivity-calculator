@@ -29,7 +29,7 @@ import os
 import socket
 if (socket.gethostname() == 'namoi'):
     # Need to setup the matplotlib area.
-    os.environ['HOME'] = '/var/www/vhosts/www.narrabri.atnf.csiro.au/cgi-bin/obstools'
+    os.environ['HOME'] = '/var/www/vhosts/www.narrabri.atnf.csiro.au/writeable/cgi-bin/obstools'
 import matplotlib
 # This line is needed since we run matplotlib without an X-server.
 matplotlib.use('Agg')
