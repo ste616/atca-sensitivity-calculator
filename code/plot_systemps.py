@@ -83,6 +83,11 @@ for i in range(0, len(bands)):
     speed[b] = { 'centreFrequency': cont['centreFrequency'],
                  'value': (np.power(compsens[b]['value'], 2) * effFOV) }
 
+def tickthinner_y(ax):
+    for n, label in enumerate(ax.yaxis.get_ticklabels()):
+        if n % 2 != 0:
+            label.set_visible(False)
+    
 def plotter(ax, obj, band):
     f = np.array(obj[band]['centreFrequency']) / 1000.
     ax.plot(f, obj[band]['value'], '-', color="black")
@@ -107,14 +112,19 @@ fig, (ax1, ax2, ax3, ax4, ax5, ax6) = plt.subplots(6, 1)
 fig.subplots_adjust(hspace=0.5)
 # Top plot is 3mm.
 plotter(ax1, btsys, "3mm")
+tickthinner_y(ax1)
 # 7mm.
 plotter(ax2, btsys, "7mm")
+tickthinner_y(ax2)
 # 15mm.
 plotter(ax3, btsys, "15mm")
+tickthinner_y(ax3)
 # 4cm.
 plotter(ax4, btsys, "4cm")
+tickthinner_y(ax4)
 # 16cm.
 plotter(ax5, btsys, "16cm")
+tickthinner_y(ax5)
 # All.
 plotter(ax6, btsys, "3mm")
 plotter(ax6, btsys, "7mm")
@@ -124,8 +134,10 @@ plotter(ax6, btsys, "16cm")
 ax6.set_xlim((btsys['16cm']['centreFrequency'][0] / 1000.),
              (btsys['3mm']['centreFrequency'][-1] / 1000.))
 ax6.set_xlabel('Frequency [GHz]')
+ax6.set_yscale('log')
+ax6.yaxis.set_major_formatter(mtick.ScalarFormatter())
 fig.text(0.04, 0.5, "System Temperature [K]", va='center', rotation='vertical')
-plt.savefig("tsys.png")
+plt.savefig("tsys.png", dpi=300)
 
 # A Tsys plot compensating for efficiency.
 plt.clf()
@@ -178,6 +190,38 @@ ax6.set_xlim((bsefd['16cm']['centreFrequency'][0] / 1000.),
 ax6.set_xlabel('Frequency [GHz]')
 fig.text(0.04, 0.5, "SEFD [Jy]", va='center', rotation='vertical')
 plt.savefig("sefd.png")
+
+plt.clf()
+fig, (ax1, ax2, ax3, ax4, ax5, ax6) = plt.subplots(6, 1)
+fig.subplots_adjust(hspace=0.5)
+# Top plot is 3mm.
+plotter(ax1, bsefd, "3mm")
+# 7mm.
+plotter(ax2, bsefd, "7mm")
+# 15mm.
+plotter(ax3, bsefd, "15mm")
+# 4cm.
+plotter(ax4, bsefd, "4cm")
+# 16cm.
+plotter(ax5, bsefd, "16cm")
+# All.
+plotter(ax6, bsefd, "3mm")
+plotter(ax6, bsefd, "7mm")
+plotter(ax6, bsefd, "15mm")
+plotter(ax6, bsefd, "4cm")
+plotter(ax6, bsefd, "16cm")
+ax6.set_xlim((bsefd['16cm']['centreFrequency'][0] / 1000.),
+             (bsefd['3mm']['centreFrequency'][-1] / 1000.))
+ax6.set_xlabel('Frequency [GHz]')
+fig.text(0.04, 0.5, "SEFD [Jy]", va='center', rotation='vertical')
+plt.savefig("single_sefd.png")
+
+plt.clf()
+fig, ax = plt.subplots(1, 1)
+plotter(ax, bsefd, "16cm")
+ax.set_xlabel('Frequency [GHz]')
+fig.text(0.04, 0.5, "SEFD [Jy]", va='center', rotation='vertical')
+plt.savefig("sefd_16cm.png")
 
 # The sensitivity for SKA comparison.
 plt.clf()
