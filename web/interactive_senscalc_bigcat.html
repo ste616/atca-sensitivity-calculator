@@ -3,8 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link rel="stylesheet" type="text/css"
-          href="http://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
-    <link href="http://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css">
+          href="https://yui.yahooapis.com/3.4.1/build/cssreset/cssreset-min.css">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/ca_style.css">
     <link rel="stylesheet" type="text/css" href="css/topcoat-desktop-light.css">
     <link rel="stylesheet" type="text/css" href="/jslib/dojo/1.10.4/dijit/themes/claro/claro.css">
@@ -30,11 +30,12 @@
         return false;
       }
     </script>
-    <script src="interactive_senscalc.js"></script>
+    <script src="interactive_senscalc_bigcat.js"></script>
     <title>ATCA Sensitivity Calculator - Interactive Version</title>
+    <?php include( $_SERVER['DOCUMENT_ROOT'] . "/includes/standard_head.inc" ) ?>
   </head>
   <body class="claro">
-    <!--#include virtual="/includefiles/ca_header.html" -->  
+    <?php include( $_SERVER['DOCUMENT_ROOT'] . "/includes/title_bar_atnf.inc" ) ?>  
     <h1>BIGCAT Sensitivity Calculator</h1>
     <div class="version-number">Version: 2024-Nov-14
       (<span class="showHelp lightBackground" name="changeLog">Change Log</span>)</div>
@@ -535,7 +536,7 @@
 	    <li><strong>The spectral resolution of each zoom band</strong>:
 	      Each configuration may split its zooms into a different number
 	      of channels.</li>
-	  </ul><br /><br />
+	  </ul><br />
 	  At least the following modes should be available with BIGCAT, but you
 	  may enter any values in this calculator, since BIGCAT should be able
 	  to support whatever configuration you require. If you require non-standard
@@ -564,13 +565,13 @@
 	  per zoom in the data column at the left of the calculator and move on to
 	  the next question.
 	</div>
-	<table class="interactive-table">
-	  <tr><th>Standard BIGCAT Configuration:</th></tr>
+	<table class="interactive-table-listing">
+	  <tr><th>Standard BIGCAT Configuration</th></tr>
 	  <tr>
 	    <td>
 	      <input type="radio" id="interactive-bigcat-mode-continuum" name="interactive-bigcat-mode"
 		     value="continuum">
-	      <label for="interactive-bigcat-mode-1">Continuum</label>
+	      <label for="interactive-bigcat-mode-continuum">Continuum</label>
 	      <input type="radio" id="interactive-bigcat-mode-spectral74" name="interactive-bigcat-mode"
 		     value="spectral74">
 	      <label for="interactive-bigcat-mode-spectral74">Spectral 74 kHz</label>
@@ -1584,7 +1585,7 @@
       <div class="md-content">
 	<h3>Zoom Frequency Invalid</h3>
 	<div>
-	  <p>The zoom frequency you have entered is invalid, as CABB is
+	  <p>The zoom frequency you have entered is invalid, as BIGCAT is
 	    not capable of observing at that frequency. Please enter a
 	    valid zoom frequency.</p>
 	  <button class="md-close">Gotcha!</button>
@@ -1594,29 +1595,27 @@
       
     <div class="md-modal md-effect-1" id="modal-error-cabbfreq">
       <div class="md-content">
-	<h3>CABB Central Frequency Invalid</h3>
+	<h3>BIGCAT Central Frequency Invalid</h3>
 	<div>
 	  <p>The continuum central frequency you have entered is invalid, as 
-	    the CABB LOs are not able to tune to that frequency. Please enter a
+	    the BIGCAT LOs are not able to tune to that frequency. Please enter a
 	    valid central frequency.</p>
 	  <button class="md-close">Gotcha!</button>
 	</div>
       </div> 
     </div> <!-- #modal-error-cabbfreq -->
 
-    <div class="md-modal md-effect-1" id="modal-error-nzooms">
+    <div class="md-modal md-effect-1" id="modal-error-subbandchannels">
       <div class="md-content">
-	<h3>Invalid Number of zooms</h3>
+	<h3>Number of subband channels invalid</h3>
 	<div>
-	  <p>CABB can provide consolidated zoom bands that use
-	    up to 16 individual zoom channels.</p>
-	  <p>Please restrict the
-	    number of zooms you use to between 1 and 16 inclusive.</p>
+	  <p>The number of subband channels must always be supplied, and be
+	    an integer number of channels greater than 1.</p>
 	  <button class="md-close">Gotcha!</button>
 	</div>
-      </div> 
-    </div> <!-- #modal-error-nzooms -->
-
+      </div>
+    </div> <!-- #modal-error-subbandchannels -->
+    
     <div class="md-modal md-effect-1" id="modal-error-elevation">
       <div class="md-content">
 	<h3>Invalid Elevation Limit</h3>

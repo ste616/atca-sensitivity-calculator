@@ -378,6 +378,55 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 		 }
 	     }
 
+	     // Make the BIGCAT configuration buttons change the data numbers.
+	     var changeBigcatConfigurations = function(evtObj) {
+		 var btnValue = evtObj.target.value;
+		 var valuesToUse = {
+		     'continuum': { 'data-bigcat-subbandchannels': 128,
+				    'data-bigcat-zoombandwidth': 0,
+				    'data-bigcat-zoomchannels': 0 },
+		     'spectral74': { 'data-bigcat-subbandchannels': 1728,
+				    'data-bigcat-zoombandwidth': 0,
+				    'data-bigcat-zoomchannels': 0 },
+		     'spectral37': { 'data-bigcat-subbandchannels': 3456,
+				    'data-bigcat-zoombandwidth': 0,
+				    'data-bigcat-zoomchannels': 0 },
+		     'spectral18': { 'data-bigcat-subbandchannels': 6912,
+				    'data-bigcat-zoombandwidth': 0,
+				    'data-bigcat-zoomchannels': 0 },
+		     'spectral9': { 'data-bigcat-subbandchannels': 13824,
+				    'data-bigcat-zoombandwidth': 0,
+				    'data-bigcat-zoomchannels': 0 },
+		     'zoom2.75': { 'data-bigcat-subbandchannels': 128,
+				    'data-bigcat-zoombandwidth': 2.048,
+				   'data-bigcat-zoomchannels': 4096 },
+		     'zoom4.24': { 'data-bigcat-subbandchannels': 1728,
+				    'data-bigcat-zoombandwidth': 4,
+				    'data-bigcat-zoomchannels': 16384 },
+		     'zoom2.06': { 'data-bigcat-subbandchannels': 128,
+				    'data-bigcat-zoombandwidth': 2,
+				    'data-bigcat-zoomchannels': 32768 }
+		 };
+		 var vals = valuesToUse[btnValue];
+		 if (vals) {
+		     for (const id in vals) {
+			 if (vals[id] == 0) {
+			     // We clear the entry.
+			     domAttr.set(id, 'value', '');
+			 } else {
+			     domAttr.set(id, 'value', vals[id]);
+			 }
+		     }
+		 }
+	     };
+	     var bigcatConfigurationElements = [ 'continuum', 'spectral74', 'spectral37',
+						 'spectral18', 'spectral9', 'zoom2-0.5',
+						 'zoom4-0.24', 'zoom2-0.06' ];
+	     for (const bce in bigcatConfigurationElements) {
+		 on(dom.byId("interactive-bigcat-mode-" + bigcatConfigurationElements[bce]), 'click',
+		    changeBigcatConfigurations);		 
+	     }
+	     
 	     // Set up the interview functionality.
 	     var panelShown = null;
 	     var firstPanel = 'panel-mode-choice';
@@ -392,8 +441,8 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 		     'next': 'panel-array-configuration', 
 		     'previous': 'panel-mode-choice'
 		 }, 'panel-array-configuration': {
-		     'next': 'panel-cabb-configuration', 'previous': ''
-		 }, 'panel-cabb-configuration': {
+		     'next': 'panel-bigcat-configuration', 'previous': ''
+		 }, 'panel-bigcat-configuration': {
 		     'next': 'panel-source-properties', 
 		     'previous': 'panel-array-configuration'
 		 }, 'panel-source-properties': {
@@ -959,7 +1008,7 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 		 query('.results-summary', dom.byId('panel-results-summary')).
 		     addClass('invisible');
 		 if (query('[name="data-required"]:checked').val() === 'Integration') {
-		     if (domAttr.get('data-cabb-zoomfreq', 'value') !== '') {
+		     if (domAttr.get('data-bigcat-zoomfreq', 'value') !== '') {
 			 // Display the zoom summary, for RMS sensitivity.
 			 domClass.remove('results-summary-zoom-integration', 'invisible');
 		     } else {
@@ -970,6 +1019,15 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 			     // Display the continuum summary, for RMS sensitivity.
 			     domClass.remove('results-summary-continuum-integration', 'invisible');
 			 }
+		     }
+		     if ((domAttr.get('data-bigcat-zoombandwidth', 'value') == '') ||
+			 (domAttr.get('data-bigcat-zoomchannels', 'value') == '')) {
+			 // We hide all the zoom information since no zooms are configured.
+			 query('.results-zoom-panel').addClass('invisible');
+			 query('.choice-zoom').addClass('invisible');
+		     } else {
+			 query('.results-zoom-panel').removeClass('invisible');
+			 //query('.choice-zoom').removeClass('invisible');
 		     }
 		 } else if (query('[name="data-required"]:checked').val() === 'Sensitivity') {
 		     var weatherVal = query('[name="data-sensitivity-weather"]:checked').val();
@@ -1075,15 +1133,27 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 		 pack['ellimit'] = domAttr.get('data-elevation-limit', 'value');
 		 pack['ha_min'] = domAttr.get('data-hourangle-limit-min', 'value');
 		 pack['ha_max'] = domAttr.get('data-hourangle-limit-max', 'value');
-		 pack['corrconfig'] = query('[name="data-cabb-mode"]:checked').val();
+		 pack['subband_channels'] = domAttr.get('data-bigcat-subbandchannels', 'value');
+		 if ((pack['subband_channels'] === '') ||
+		     (parseInt(pack['subband_channels']) <= 0)) {
+		     showAlert('modal-error-subbandchannels');
+		     return;
+		 }
 		 pack['weighting'] = query('[name="data-image-weight"]:checked').val();
-		 var tmpVal = domAttr.get('data-cabb-zoomfreq', 'value');
+		 var tmpVal = domAttr.get('data-bigcat-zoomfreq', 'value');
 		 if (tmpVal !== '') {
 		     if (!bandName(parseInt(tmpVal))) {
 			 showAlert('modal-error-zoomfreq');
 			 return;
 		     }
 		     pack['zoomfreq'] = tmpVal;
+		 }
+		 tmpVal = domAttr.get('data-bigcat-zoombandwidth', 'value');
+		 var tmpVal2 = domAttr.get('data-bigcat-zoomchannels', 'value');
+		 if ((tmpVal != '') && (parseFloat(tmpVal) > 0) &&
+		     (tmpVal2 != '') && (parseInt(tmpVal2) > 1)) {
+		     pack['zoom_bandwidth'] = tmpVal;
+		     pack['zoom_channels'] = tmpVal2;
 		 }
 		 var opMode = query('[name="data-required"]:checked').val();
 		 if (opMode === 'Integration') {
@@ -1118,7 +1188,6 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 		 }
 		 pack['smoothing'] = domAttr.get('data-smoothing-continuum', 'value');
 		 pack['zoom_smoothing'] = domAttr.get('data-smoothing-zoom', 'value');
-		 pack['zoom_width'] = domAttr.get('data-nzooms', 'value');
 		 tmpVal = domAttr.get('data-rest-frequency', 'value');
 		 if (tmpVal !== '') {
 		     if (/\=/.test(tmpVal)) {
@@ -1127,19 +1196,8 @@ require( [ 'dojo/dom', 'dojo/dom-attr', 'dojo/on', 'dojo/query', 'dojo/store/Mem
 		     }
 		     pack['restfreq'] = tmpVal;
 		 }
-		 if (dom.byId('data-remove-birdies').checked) {
-		     pack['birdies'] = true;
-		 }
 		 if (dom.byId('data-remove-rfi').checked) {
 		     pack['rfi'] = true;
-		 }
-		 tmpVal = domAttr.get('data-remove-edge-continuum', 'value');
-		 if (tmpVal > 0) {
-		     pack['edge'] = tmpVal;
-		 }
-		 tmpVal = domAttr.get('data-remove-edge-zoom', 'value');
-		 if (tmpVal > 0) {
-		     pack['zoom_edge'] = tmpVal;
 		 }
 		 var targetSeason = query('[name="data-season"]:checked').val();
 		 pack['season'] = targetSeason;

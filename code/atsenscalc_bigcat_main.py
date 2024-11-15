@@ -960,14 +960,16 @@ def main(args):
     # Plot the RMS spectral noise templates into output files.
     # The name of the output file; we make sure it doesn't end with ".png.png" first.
     outfile = args.output.replace('.png', '') + '.png'
-    sens.plotSpectrum(workArea['continuum-smooth-rms'], [ 'typical', 'best', 'worst' ], outfile)
+    fullOutfile = args.plot_location + '/' + outfile
+    sens.plotSpectrum(workArea['continuum-smooth-rms'], [ 'typical', 'best', 'worst' ], fullOutfile)
     # Put the name of the output file in the output dictionary.
     output['output_plot'] = outfile
 
     if (specificZoomCalc):
         # We make an output plot of the RMS spectral noise of the specific zoom as well.
         szoutfile = args.output.replace('.png', '') + '.sz.png'
-        sens.plotSpectrum(workArea['specificZoom-rms'], [ 'typical', 'best', 'worst'], szoutfile)
+        szFullOutfile = args.plot_location + '/' + szoutfile
+        sens.plotSpectrum(workArea['specificZoom-rms'], [ 'typical', 'best', 'worst'], szFullOutfile)
         # Put the name of this output file in the output dictionary.
         output['output_zoom_plot'] = szoutfile
     #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
